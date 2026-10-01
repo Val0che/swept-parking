@@ -1,0 +1,25 @@
+{
+  "name": "@mtl-parking/pipeline",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "download": "tsx src/fetch.ts",
+    "build": "tsx src/build.ts",
+    "lookup": "tsx src/lookup.ts",
+    "check": "tsc --noEmit",
+    "test": "vitest run",
+    "publish:app": "tsx src/publish.ts"
+  },
+  "dependencies": {
+    "csv-parse": "^7.0.3",
+    "flatbush": "^4.6.2",
+    "@swept/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/flatbush": "^4.2.2",
+    "@types/node": "^26.6.3",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

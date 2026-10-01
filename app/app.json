@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "Swept",
+    "slug": "swept",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.val0che.balai",
+      "appleTeamId": "UJZUKWJQ48"
+    },
+    "android": {
+      "package": "com.val0che.balai",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "./plugins/withoutPushEntitlement",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Swept uses your location to find the side of the street where you parked.",
+          "locationAlwaysAndWhenInUsePermission": "Swept records where you parked when your car's Bluetooth disconnects, so it can remind you before street cleaning without you opening the app.",
+          "isIosBackgroundLocationEnabled": true
+        }
+      ],
+      "expo-notifications",
+      "./plugins/withSceneLifecycle",
+      "expo-router",
+      "expo-localization",
+      "expo-sqlite",
+      "@react-native-community/datetimepicker"
+    ],
+    "experiments": {
+      "inlineModules": {
+        "watchedDirectories": [
+          "native"
+        ]
+      },
+      "typedRoutes": true
+    },
+    "scheme": "swept"
+  }
+}

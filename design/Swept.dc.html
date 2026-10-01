@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/nocturne-f203fb44-dea0-47e3-bc65-799b5a70fca8/styles.css">
+<script src="_ds/nocturne-f203fb44-dea0-47e3-bc65-799b5a70fca8/_ds_bundle.js"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>body{margin:0;background:#161826} a{color:#9184d9} a:hover{color:#d2cefd}</style>
+</helmet>
+
+<section id="intro" style="display:flex;flex-direction:column;gap:12px;padding:72px 80px 0;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div style="width:56px;height:56px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#353b80,#161826 85%);box-shadow:inset 0 0 0 1px rgba(233,233,237,.14)"><div style="position:absolute;left:30%;top:-5%;bottom:-5%;width:40%;background:rgba(233,233,237,.07)"></div><div style="position:absolute;left:30%;top:18%;bottom:18%;width:5%;border-radius:2px;background:#595d6c"></div><div style="position:absolute;right:29%;top:18%;bottom:18%;width:7%;border-radius:3px;background:#b5abfc;box-shadow:0 0 10px 2px #9184d9"></div></div>
+    <h1 style="margin:0;font-size:48px;font-weight:500;letter-spacing:-.025em">Swept — iOS 27</h1>
+  </div>
+  <p style="margin:0;font-size:18px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Rappels de balai mécanique pour le côté de rue où vous êtes garé. Interface en français par défaut, clair et sombre. Matériau Liquid Glass d'iOS 27 sur la couche de navigation (boutons flottants, recherche, feuilles, notifications) ; le contenu reste opaque. Ordre : 1 Accueil garé · 2 Choisir le côté · 3 Confirmer · 4 Notifications · 5 Onboarding et réglages · 6 Marque et couleurs.</p>
+</section>
+
+<section id="home" style="display:flex;flex-direction:column;gap:40px;padding:80px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">1 · Écran 7</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Accueil — garé</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Une seule réponse en haut : quand bouger, en jours puis en heures. La couleur d'état est une ligne et une lueur ; seul « Déplacez maintenant » teinte la carte entière. Chaque état a aussi son mot et son icône, jamais la couleur seule.</p>
+  </div>
+  <sc-for list="{{homeRows}}" as="row" hint-placeholder-count="3">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <span style="font-size:15px;font-weight:500;color:var(--color-neutral-300);letter-spacing:.02em">{{row.title}}</span>
+      <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+        <sc-for list="{{row.items}}" as="h" hint-placeholder-count="4">
+          <div style="{{h.vars}}" data-screen-label="{{h.sl}}">
+            <div style="display:flex;flex-direction:column;gap:26px">
+              <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">{{h.label}}</span><span style="font-size:13px;color:var(--color-neutral-500)">{{h.labelSub}}</span></div>
+              <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+                <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>{{h.time}}</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+                <div style="padding:4px 16px 0;display:flex;flex-direction:column;gap:12px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;height:40px;padding-left:4px">
+                    <span style="font-size:14px;color:var(--mut)">{{h.since}}</span>
+                    <div style="display:flex;gap:8px">
+                      <div style="width:38px;height:38px;border-radius:19px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:19px"><i class="ph ph-bookmark-simple"></i></div>
+                      <div style="width:38px;height:38px;border-radius:19px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:19px"><i class="ph ph-gear-six"></i></div>
+                    </div>
+                  </div>
+                  <sc-if value="{{h.banner}}" hint-placeholder-val="{{false}}">
+                    <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font-size:14px;line-height:1.3">
+                      <i class="{{h.bannerIcon}}" style="font-size:20px;flex:none;color:{{h.bannerIc}}"></i>
+                      <span style="flex:1;text-wrap:pretty">{{h.bannerText}}</span>
+                      <span style="color:var(--acc);font-weight:600;flex:none">{{h.bannerCta}}</span>
+                      <sc-if value="{{h.bannerX}}" hint-placeholder-val="{{false}}"><i class="ph ph-x" style="color:var(--mut);font-size:15px"></i></sc-if>
+                    </div>
+                  </sc-if>
+                  <div style="position:relative;border-radius:24px;padding:20px 20px 22px;background:{{h.heroBg}};box-shadow:inset 0 0 0 1px var(--line);overflow:hidden;display:flex;flex-direction:column">
+                    <div style="position:absolute;left:20px;width:56px;top:0;height:3px;border-radius:0 0 3px 3px;background:{{h.sc}}"></div>
+                    <div style="display:flex;align-items:center;gap:7px;font-size:15px;font-weight:600;color:{{h.sc}}"><i class="{{h.icon}}" style="font-size:18px"></i>{{h.chip}}</div>
+                    <span style="margin-top:14px;font-size:16px;color:var(--mut)">{{h.eyebrow}}</span>
+                    <span style="margin-top:2px;font-size:46px;line-height:1.04;font-weight:500;letter-spacing:-.035em;text-wrap:balance">{{h.big}}</span>
+                    <span style="margin-top:8px;font-size:17px;line-height:1.35;text-wrap:pretty">{{h.sub}}</span>
+                    <sc-if value="{{h.progress}}" hint-placeholder-val="{{false}}">
+                      <div style="margin-top:16px;height:6px;border-radius:3px;background:var(--fill);overflow:hidden"><div style="width:{{h.progress}};height:100%;border-radius:3px;background:var(--now)"></div></div>
+                      <div style="margin-top:6px;display:flex;justify-content:space-between;font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums"><span>{{h.pL}}</span><span>{{h.pR}}</span></div>
+                      <div style="margin-top:16px;height:52px;border-radius:26px;border:1.5px solid var(--now);color:var(--now);display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:600;background:color-mix(in srgb,var(--now) 10%,transparent)"><i class="ph-bold ph-car-simple" style="font-size:19px"></i>{{h.moveBtn}}</div>
+                    </sc-if>
+                    <sc-if value="{{h.disputed}}" hint-placeholder-val="{{false}}">
+                      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.35;color:var(--mut)"><i class="ph ph-signpost" style="font-size:18px;color:var(--soon);flex:none"></i><span style="text-wrap:pretty">{{h.disputed}}</span></div>
+                    </sc-if>
+                  </div>
+                  <div style="border-radius:24px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);overflow:hidden">
+                    <div style="height:96px;position:relative;overflow:hidden;background:var(--fill)">
+                      <div style="position:absolute;left:50%;top:0;bottom:0;width:124px;margin-left:-62px;background:var(--fill)"></div>
+                      <div style="position:absolute;left:50%;top:0;bottom:0;width:3px;margin-left:-62px;background:{{h.wC}};opacity:.4"></div>
+                      <div style="position:absolute;left:50%;top:10px;bottom:10px;width:2px;margin-left:-1px;background:repeating-linear-gradient(to bottom,var(--mut) 0 8px,transparent 8px 16px);opacity:.4"></div>
+                      <i class="ph-fill ph-car-profile" style="position:absolute;left:50%;top:50%;margin:-15px 0 0 18px;font-size:30px;line-height:1;transform:rotate(-90deg);color:var(--fg)"></i>
+                      <div style="position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:56px;background:{{h.curbBg}};box-shadow:0 0 14px color-mix(in srgb,{{h.dayC}} 70%,transparent)"></div>
+                      <div style="position:absolute;top:8px;left:12px;display:flex;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--mut)"><i class="ph-bold ph-arrow-up"></i>N</div>
+                    </div>
+                    <div style="padding:14px 16px 4px;display:flex;flex-direction:column;gap:2px">
+                      <span style="font-size:20px;font-weight:500;letter-spacing:-.01em">{{h.street}}</span>
+                      <span style="font-size:14px;color:var(--mut)">{{h.side}}</span>
+                      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:15px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:700;background:{{h.dayC}};color:{{h.dayT}}">{{h.dayK}}</span><span>{{h.sched}}</span></div>
+                    </div>
+                    <div style="margin:10px 16px 0;border-top:1px solid var(--line);height:46px;display:flex;align-items:center;justify-content:space-between;font-size:15px;font-weight:500"><span style="display:flex;gap:8px;align-items:center;color:var(--acc)"><i class="ph ph-arrows-left-right" style="font-size:17px"></i>{{h.wrong}}</span><i class="ph ph-caret-right" style="color:var(--mut)"></i></div>
+                  </div>
+                  <sc-if value="{{h.showRem}}" hint-placeholder-val="{{true}}">
+                    <div style="border-radius:24px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:2px 16px">
+                      <div style="display:flex;justify-content:space-between;align-items:center;height:44px"><span style="font-size:15px;font-weight:600">{{h.remTitle}}</span><span style="color:var(--acc);font-size:15px">{{h.remEdit}}</span></div>
+                      <sc-for list="{{h.rem}}" as="r" hint-placeholder-count="2">
+                        <div style="display:flex;align-items:center;gap:12px;height:44px;border-top:1px solid var(--line);font-size:15px;color:{{r.c}}"><i class="{{r.ic}}" style="font-size:19px;color:{{r.icc}}"></i><span style="flex:1">{{r.l}}</span><span style="font-variant-numeric:tabular-nums">{{r.v}}</span></div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{h.showFoot}}" hint-placeholder-val="{{true}}"><div style="display:flex;gap:6px;align-items:center;padding:0 6px;font-size:12px;color:var(--mut)"><i class="ph ph-info" style="font-size:14px"></i>{{h.foot}}</div></sc-if>
+                </div>
+                <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</section>
+
+<section id="pick" style="display:flex;flex-direction:column;gap:40px;padding:80px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">2 · Écran 5</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Choisir le côté</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Chaque côté d'îlot est sa propre ligne, posée sur la bordure. Couleur par jour (palette Okabe-Ito, lisible par les daltoniens) doublée de l'initiale du jour sur la ligne. Gris : pas de données. Tirets : panneaux contradictoires. Nord = vers le haut de l'île.</p>
+  </div>
+  <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+    <div style="{{lv}}" data-screen-label="5 Pick default">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">5 · À l'ouverture</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · GPS précis, aucun côté choisi</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;inset:0">{{mapPick}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>18:12</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:58px;left:12px;right:12px;display:flex;gap:8px">
+            <div style="width:48px;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:20px"><i class="ph ph-x"></i></div>
+            <div style="flex:1;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:17px;color:var(--mut)"><i class="ph ph-magnifying-glass" style="font-size:19px"></i>Rechercher une adresse</div>
+          </div>
+          <div style="position:absolute;z-index:2;right:12px;bottom:322px;width:48px;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--acc)"><i class="ph-fill ph-navigation-arrow"></i></div>
+          <div style="position:absolute;z-index:2;left:8px;right:8px;bottom:8px;border-radius:40px;padding:10px 22px 34px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;flex-direction:column;gap:6px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <span style="margin-top:8px;font-size:22px;font-weight:500;letter-spacing:-.015em">Touchez votre côté de rue</span>
+            <span style="font-size:15px;line-height:1.4;color:var(--mut);text-wrap:pretty">Chaque côté a son jour. Vous êtes sur l'avenue Coloniale.</span>
+            <div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px">
+              <sc-for list="{{legendL}}" as="d" hint-placeholder-count="9">
+                <div style="display:flex;align-items:center;gap:7px;font-size:13px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:700;box-sizing:border-box;background:{{d.c}};color:{{d.t}};border:{{d.b}}">{{d.k}}</span>{{d.n}}</div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{lv}}" data-screen-label="5 Pick selected">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">5 · Côté touché</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · la ligne s'épaissit, la feuille résume</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;inset:0">{{mapPickSel}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>18:12</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:58px;left:12px;right:12px;display:flex;gap:8px">
+            <div style="width:48px;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:20px"><i class="ph ph-x"></i></div>
+            <div style="flex:1;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:17px;color:var(--mut)"><i class="ph ph-magnifying-glass" style="font-size:19px"></i>Rechercher une adresse</div>
+          </div>
+          <div style="position:absolute;z-index:2;right:12px;bottom:322px;width:48px;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--acc)"><i class="ph-fill ph-navigation-arrow"></i></div>
+          <div style="position:absolute;z-index:2;left:8px;right:8px;bottom:8px;border-radius:40px;padding:10px 22px 34px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;flex-direction:column;gap:4px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <div style="margin-top:10px;display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;padding:0 7px;border-radius:11px;font-size:12px;font-weight:700;background:#0072B2;color:#f3f5fe">Ve</span><span style="font-size:22px;font-weight:500;letter-spacing:-.015em">avenue Coloniale, côté est</span></div>
+            <span style="font-size:15px;color:var(--mut)">3817–3935 · entre Duluth et Napoléon</span>
+            <div style="margin-top:12px;border-radius:18px;background:var(--fill);padding:4px 14px">
+              <div style="display:flex;align-items:center;gap:10px;height:42px;font-size:15px"><i class="ph ph-calendar-blank" style="font-size:18px;color:var(--acc)"></i><span style="flex:1">Vendredi 15 h 30 – 16 h 30</span><span style="color:var(--mut)">1 avr. – 1 déc.</span></div>
+              <div style="display:flex;align-items:center;gap:10px;height:42px;font-size:14px;color:var(--mut);border-top:1px solid var(--line)"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:700;background:#D4C21E;color:#161826">Je</span><span>En face, côté ouest : jeudi 9 h – 10 h</span></div>
+            </div>
+            <div style="margin-top:12px;height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Continuer</div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{dv}}" data-screen-label="5 Pick low GPS">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">5 · GPS imprécis</span><span style="font-size:13px;color:var(--color-neutral-500)">Sombre · cercle de précision, aucun côté deviné</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;inset:0">{{mapPickLow}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>23:40</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:58px;left:12px;right:12px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;gap:8px">
+              <div style="width:48px;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;justify-content:center;font-size:20px"><i class="ph ph-x"></i></div>
+              <div style="flex:1;height:48px;border-radius:24px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;align-items:center;gap:10px;padding:0 16px;font-size:17px;color:var(--mut)"><i class="ph ph-magnifying-glass" style="font-size:19px"></i>Rechercher une adresse</div>
+            </div>
+            <div style="align-self:flex-start;display:flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:18px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);font-size:14px"><i class="ph ph-crosshair-simple" style="color:var(--soon);font-size:17px"></i>Position imprécise · ± 60 m</div>
+          </div>
+          <div style="position:absolute;z-index:2;left:8px;right:8px;bottom:8px;border-radius:40px;padding:10px 22px 34px;background:var(--glass);backdrop-filter:blur(12px) saturate(1.8);-webkit-backdrop-filter:blur(12px) saturate(1.8);box-shadow:var(--rim);display:flex;flex-direction:column;gap:6px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <span style="margin-top:8px;font-size:22px;font-weight:500;letter-spacing:-.015em">De quel côté êtes-vous ?</span>
+            <span style="font-size:15px;line-height:1.4;color:var(--mut);text-wrap:pretty">Le GPS hésite entre les deux côtés. Touchez la ligne la plus proche de votre voiture.</span>
+            <div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px">
+              <sc-for list="{{legendD}}" as="d" hint-placeholder-count="9">
+                <div style="display:flex;align-items:center;gap:7px;font-size:13px"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:18px;padding:0 6px;border-radius:9px;font-size:11px;font-weight:700;box-sizing:border-box;background:{{d.c}};color:{{d.t}};border:{{d.b}}">{{d.k}}</span>{{d.n}}</div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="confirm" style="display:flex;flex-direction:column;gap:40px;padding:80px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">3 · Écran 6</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Confirmer l'emplacement</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Ce qui s'applique, avant d'enregistrer : rue, côté, tronçon, horaire, prochain passage et les rappels exacts qui partiront. Si les panneaux divergent, l'horaire majoritaire est en grand et le rappel suit l'heure la plus tôt.</p>
+  </div>
+  <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+    <div style="{{lv}}" data-screen-label="6 Confirm">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">6 · Confirmer</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · données de la Ville concordantes</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;left:0;right:0;top:0;height:270px">{{mapConf}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>18:13</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:230px;left:8px;right:8px;bottom:8px;border-radius:44px;background:var(--sheet);backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);box-shadow:var(--rim);padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:4px 4px 0">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:28px;font-weight:500;letter-spacing:-.02em">avenue Coloniale</span><span style="font-size:15px;color:var(--mut)">3817–3935 · côté est · entre Duluth et Napoléon</span></div>
+              <div style="width:32px;height:32px;border-radius:16px;background:var(--fill);display:flex;align-items:center;justify-content:center;flex:none;color:var(--mut)"><i class="ph-bold ph-x"></i></div>
+            </div>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center"><span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:28px;border-radius:14px;font-size:13px;font-weight:700;background:#0072B2;color:#f3f5fe;flex:none">Ve</span><div style="display:flex;flex-direction:column"><span style="font-size:18px;font-weight:500">Vendredi · 15 h 30 – 16 h 30</span><span style="font-size:14px;color:var(--mut)">Du 1er avril au 1er décembre</span></div></div>
+              <div style="border-top:1px solid var(--line);padding-top:12px;display:flex;gap:10px;align-items:center;font-size:15px"><i class="ph ph-calendar-check" style="font-size:19px;color:var(--acc)"></i>Prochain passage : ven. 2 oct., dans 2 jours</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Rappels prévus</span>
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;gap:12px;height:46px;font-size:15px"><i class="ph ph-moon" style="font-size:19px;color:var(--acc)"></i><span style="flex:1">La veille</span><span style="color:var(--mut)">jeu. 1 oct. · 20 h 00</span></div>
+                <div style="display:flex;align-items:center;gap:12px;height:46px;font-size:15px;border-top:1px solid var(--line)"><i class="ph ph-alarm" style="font-size:19px;color:var(--acc)"></i><span style="flex:1">1 h avant</span><span style="color:var(--mut)">ven. 2 oct. · 14 h 30</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px">
+              <div style="height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Enregistrer</div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500"><i class="ph ph-arrows-left-right"></i>Autre côté</div>
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500"><i class="ph ph-pencil-simple"></i>Modifier l'horaire</div>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{lv}}" data-screen-label="6 Confirm disputed">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">6 · Panneaux contradictoires</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · majorité en grand, rappel sur l'heure la plus tôt</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;left:0;right:0;top:0;height:240px">{{mapConfDisp}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>18:13</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:196px;left:8px;right:8px;bottom:8px;border-radius:44px;background:var(--sheet);backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);box-shadow:var(--rim);padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:4px 4px 0">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:28px;font-weight:500;letter-spacing:-.02em">avenue Coloniale</span><span style="font-size:15px;color:var(--mut)">3817–3935 · côté est · entre Duluth et Napoléon</span></div>
+              <div style="width:32px;height:32px;border-radius:16px;background:var(--fill);display:flex;align-items:center;justify-content:center;flex:none;color:var(--mut)"><i class="ph-bold ph-x"></i></div>
+            </div>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:center"><span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:28px;border-radius:14px;font-size:13px;font-weight:700;background:#0072B2;color:#f3f5fe;flex:none">Ve</span><div style="display:flex;flex-direction:column;flex:1"><span style="font-size:18px;font-weight:500">Vendredi · 15 h 30 – 16 h 30</span><span style="font-size:14px;color:var(--mut)">3 panneaux sur 4 · 1er avril – 1er déc.</span></div></div>
+              <div style="border-top:1px dashed var(--line);padding-top:12px;display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.35"><i class="ph ph-signpost" style="font-size:19px;color:var(--soon);flex:none"></i><div style="display:flex;flex-direction:column;gap:2px"><span>1 panneau indique ven. 15 h 00 – 16 h 00</span><span style="font-size:14px;color:var(--mut);text-wrap:pretty">On vous rappelle pour 15 h 00, l'heure la plus tôt. Jetez un œil au panneau près de la voiture.</span></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Rappels prévus</span>
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;gap:12px;height:46px;font-size:15px"><i class="ph ph-moon" style="font-size:19px;color:var(--acc)"></i><span style="flex:1">La veille</span><span style="color:var(--mut)">jeu. 1 oct. · 20 h 00</span></div>
+                <div style="display:flex;align-items:center;gap:12px;height:46px;font-size:15px;border-top:1px solid var(--line)"><i class="ph ph-alarm" style="font-size:19px;color:var(--acc)"></i><span style="flex:1">1 h avant 15 h 00</span><span style="color:var(--mut)">ven. 2 oct. · 14 h 00</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px">
+              <div style="height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Enregistrer</div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500"><i class="ph ph-arrows-left-right"></i>Autre côté</div>
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500"><i class="ph ph-pencil-simple"></i>Modifier l'horaire</div>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{dv}}" data-screen-label="6 Confirm no data">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">6 · Pas de données</span><span style="font-size:13px;color:var(--color-neutral-500)">Sombre · Verdun, aucun panneau publié</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:absolute;left:0;right:0;top:0;height:270px">{{mapConfNo}}</div>
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>19:05</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="position:absolute;z-index:2;top:230px;left:8px;right:8px;bottom:8px;border-radius:44px;background:var(--sheet);backdrop-filter:blur(18px) saturate(1.8);-webkit-backdrop-filter:blur(18px) saturate(1.8);box-shadow:var(--rim);padding:8px 16px 0;display:flex;flex-direction:column;gap:12px">
+            <div style="width:36px;height:5px;border-radius:3px;background:var(--line);align-self:center"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:4px 4px 0">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:28px;font-weight:500;letter-spacing:-.02em">rue Galt</span><span style="font-size:15px;color:var(--mut)">5601–5689 · côté ouest · Verdun</span></div>
+              <div style="width:32px;height:32px;border-radius:16px;background:var(--fill);display:flex;align-items:center;justify-content:center;flex:none;color:var(--mut)"><i class="ph-bold ph-x"></i></div>
+            </div>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:16px;display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;gap:12px;align-items:flex-start"><span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:28px;border-radius:14px;font-size:13px;font-weight:700;background:#5f6373;color:#e9e9ed;flex:none">–</span><div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:500;line-height:1.3;text-wrap:pretty">Aucun panneau de nettoyage trouvé pour ce côté</span><span style="font-size:14px;line-height:1.4;color:var(--mut);text-wrap:pretty">Verdun publie peu de données. Copiez l'horaire du panneau le plus proche : c'est fait en 30 secondes, et Swept s'en souviendra.</span></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Rappels prévus</span>
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;gap:12px;height:46px;font-size:15px;color:var(--mut)"><i class="ph ph-bell-slash" style="font-size:19px"></i>Aucun, tant qu'il n'y a pas d'horaire</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:2px">
+              <div style="height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;gap:8px;font-size:17px;font-weight:600"><i class="ph-bold ph-plus"></i>Ajouter l'horaire</div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500"><i class="ph ph-arrows-left-right"></i>Autre côté</div>
+                <div style="flex:1;height:46px;border-radius:23px;background:var(--fill);display:flex;align-items:center;justify-content:center;gap:7px;font-size:15px;font-weight:500">Pas de panneau ici</div>
+              </div>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="notifs" style="display:flex;flex-direction:column;gap:40px;padding:80px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">4 · L'interface principale</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Notifications sur l'écran verrouillé</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Le titre porte l'heure et la rue, le corps dit quoi faire. Repliée à gauche, ouverte (appui long) à droite avec la mini-carte et les boutons. Seule « Le nettoyage a commencé » est urgente (Time Sensitive).</p>
+  </div>
+  <div style="display:flex;gap:72px 96px;flex-wrap:wrap;align-items:flex-start">
+    <sc-for list="{{notifs}}" as="n" hint-placeholder-count="6">
+      <div style="display:flex;flex-direction:column;gap:26px" data-screen-label="{{n.sl}}">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">{{n.label}}</span><span style="font-size:13px;color:var(--color-neutral-500)">{{n.when}}</span></div>
+        <div style="display:flex;gap:44px">
+          <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;color:#f3f5fe;font-family:var(--font-body);background:radial-gradient(90% 55% at 15% 12%,#353b80 0%,transparent 62%),radial-gradient(80% 60% at 95% 85%,#262a60 0%,transparent 65%),#11131f;box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+            <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>Fido</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;margin-top:28px"><i class="ph-fill ph-lock-simple" style="font-size:18px;opacity:.85"></i><span style="margin-top:8px;font-size:20px;font-weight:500;opacity:.9">{{n.date}}</span><span style="font-size:100px;line-height:1;font-weight:500;letter-spacing:-.04em;font-variant-numeric:tabular-nums">{{n.clock}}</span></div>
+            <div style="position:absolute;left:10px;right:10px;bottom:132px;border-radius:24px;padding:12px 14px;display:flex;gap:11px;background:rgba(243,245,254,.10);backdrop-filter:blur(8px) saturate(1.8);-webkit-backdrop-filter:blur(8px) saturate(1.8);box-shadow:inset 1px 1.5px 0 rgba(243,245,254,.5),inset -1px -1px 0 rgba(243,245,254,.14),inset 0 0 24px rgba(243,245,254,.07),0 10px 30px rgba(0,0,0,.25)">
+              <div style="width:38px;height:38px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#353b80,#161826 85%);box-shadow:inset 0 0 0 1px rgba(233,233,237,.14)"><div style="position:absolute;left:30%;top:-5%;bottom:-5%;width:40%;background:rgba(233,233,237,.07)"></div><div style="position:absolute;left:30%;top:18%;bottom:18%;width:5%;border-radius:2px;background:#595d6c"></div><div style="position:absolute;right:29%;top:18%;bottom:18%;width:7%;border-radius:3px;background:#b5abfc;box-shadow:0 0 6px 1px #9184d9"></div></div>
+              <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                <sc-if value="{{n.urgent}}" hint-placeholder-val="{{false}}"><span style="display:flex;gap:4px;align-items:center;font-size:12px;font-weight:600;color:#ffb3aa"><i class="ph-fill ph-clock"></i>URGENT</span></sc-if>
+                <div style="display:flex;justify-content:space-between;gap:8px"><span style="font-size:15px;font-weight:600;line-height:1.3">{{n.title}}</span><span style="font-size:13px;opacity:.6;flex:none">{{n.ago}}</span></div>
+                <span style="font-size:15px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{n.body}}</span>
+              </div>
+            </div>
+            <div style="position:absolute;left:46px;right:46px;bottom:46px;display:flex;justify-content:space-between"><div style="width:50px;height:50px;border-radius:25px;background:rgba(243,245,254,.08);backdrop-filter:blur(8px) saturate(1.8);-webkit-backdrop-filter:blur(8px) saturate(1.8);box-shadow:inset 1px 1.5px 0 rgba(243,245,254,.5),inset -1px -1px 0 rgba(243,245,254,.14),inset 0 0 24px rgba(243,245,254,.07),0 10px 30px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:21px"><i class="ph-fill ph-flashlight"></i></div><div style="width:50px;height:50px;border-radius:25px;background:rgba(243,245,254,.08);backdrop-filter:blur(8px) saturate(1.8);-webkit-backdrop-filter:blur(8px) saturate(1.8);box-shadow:inset 1px 1.5px 0 rgba(243,245,254,.5),inset -1px -1px 0 rgba(243,245,254,.14),inset 0 0 24px rgba(243,245,254,.07),0 10px 30px rgba(0,0,0,.25);display:flex;align-items:center;justify-content:center;font-size:21px"><i class="ph-fill ph-camera"></i></div></div>
+            <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:#f3f5fe"></div>
+          </div>
+          <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;color:#f3f5fe;font-family:var(--font-body);background:radial-gradient(90% 55% at 15% 12%,#353b80 0%,transparent 62%),radial-gradient(80% 60% at 95% 85%,#262a60 0%,transparent 65%),#11131f;box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+            <div style="position:absolute;inset:0;background:rgba(12,13,20,.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)"></div>
+            <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>{{n.clock}}</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+            <div style="position:absolute;z-index:2;top:96px;left:12px;right:12px;display:flex;flex-direction:column;gap:10px">
+              <div style="border-radius:26px;padding:14px;background:rgba(41,43,58,.55);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);box-shadow:inset 1px 1.5px 0 rgba(243,245,254,.5),inset -1px -1px 0 rgba(243,245,254,.14),inset 0 0 24px rgba(243,245,254,.07),0 10px 30px rgba(0,0,0,.25);display:flex;flex-direction:column">
+                <div style="display:flex;align-items:center;gap:8px"><div style="width:22px;height:22px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#353b80,#161826 85%)"><div style="position:absolute;left:30%;top:18%;bottom:18%;width:5%;background:#595d6c"></div><div style="position:absolute;right:29%;top:18%;bottom:18%;width:8%;border-radius:2px;background:#b5abfc;box-shadow:0 0 4px 1px #9184d9"></div></div><span style="flex:1;font-size:13px;font-weight:600;letter-spacing:.04em;opacity:.7">SWEPT</span><span style="font-size:13px;opacity:.6">{{n.ago}}</span></div>
+                <sc-if value="{{n.hasMap}}" hint-placeholder-val="{{true}}"><div style="margin-top:12px;height:150px;border-radius:16px;overflow:hidden;position:relative">{{n.map}}</div></sc-if>
+                <sc-if value="{{n.urgent}}" hint-placeholder-val="{{false}}"><span style="margin-top:12px;display:flex;gap:4px;align-items:center;font-size:12px;font-weight:600;color:#ffb3aa"><i class="ph-fill ph-clock"></i>URGENT</span></sc-if>
+                <span style="margin-top:10px;font-size:17px;font-weight:600;line-height:1.3">{{n.title}}</span>
+                <span style="margin-top:2px;font-size:16px;line-height:1.38;opacity:.92;text-wrap:pretty">{{n.body}}</span>
+                <sc-if value="{{n.extra}}" hint-placeholder-val="{{false}}"><div style="margin-top:10px;padding-top:10px;border-top:1px dashed rgba(233,233,237,.22);display:flex;gap:8px;font-size:15px;line-height:1.35"><i class="ph ph-signpost" style="color:#e8a84a;font-size:18px;flex:none"></i><span style="text-wrap:pretty">{{n.extra}}</span></div></sc-if>
+              </div>
+              <div style="border-radius:26px;overflow:hidden;display:flex;flex-direction:column;padding:6px;background:rgba(41,43,58,.5);backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);box-shadow:inset 1px 1.5px 0 rgba(243,245,254,.5),inset -1px -1px 0 rgba(243,245,254,.14),inset 0 0 24px rgba(243,245,254,.07),0 10px 30px rgba(0,0,0,.25)">
+                <sc-for list="{{n.actions}}" as="a" hint-placeholder-count="2">
+                  <div style="height:48px;padding:0 14px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;font-size:17px"><span>{{a.t}}</span><i class="{{a.ic}}" style="font-size:19px;opacity:.85"></i></div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<section id="setup" style="display:flex;flex-direction:column;gap:40px;padding:80px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">5 · Écrans 1–3, 8–11</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Onboarding et réglages</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Vus une fois (1–3) ou rarement (8–11). Listes groupées iOS, une seule action principale par écran.</p>
+  </div>
+  <div style="display:flex;gap:56px;flex-wrap:wrap;align-items:flex-start">
+
+    <div style="{{lv}}" data-screen-label="1 Welcome">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">1 · Bienvenue</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · la promesse en 5 secondes</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>9:41</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:8px 24px 0;display:flex;flex-direction:column;height:calc(100% - 54px);box-sizing:border-box">
+            <div style="height:300px;border-radius:28px;background:repeating-linear-gradient(135deg,var(--fill) 0 10px,transparent 10px 20px),var(--card);box-shadow:inset 0 0 0 1px var(--line);display:flex;align-items:flex-end;padding:16px"><span style="font-family:ui-monospace,monospace;font-size:12px;color:var(--mut)">illustration · balai mécanique, rue du Plateau</span></div>
+            <span style="margin-top:28px;font-size:40px;font-weight:500;letter-spacing:-.03em">Swept</span>
+            <span style="margin-top:6px;font-size:21px;line-height:1.3;text-wrap:pretty">On vous prévient avant le balai mécanique, pour le côté de rue où vous êtes garé.</span>
+            <div style="margin-top:24px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;gap:14px;font-size:16px"><div style="width:36px;height:36px;border-radius:18px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--acc)"><i class="ph ph-car-simple"></i></div>Vous vous garez</div>
+              <div style="display:flex;align-items:center;gap:14px;font-size:16px"><div style="width:36px;height:36px;border-radius:18px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--acc)"><i class="ph ph-arrows-left-right"></i></div>On trouve votre côté de rue</div>
+              <div style="display:flex;align-items:center;gap:14px;font-size:16px"><div style="width:36px;height:36px;border-radius:18px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--acc)"><i class="ph ph-bell-simple"></i></div>On vous rappelle de bouger</div>
+            </div>
+            <div style="margin-top:auto;margin-bottom:46px;height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Commencer</div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{dv}}" data-screen-label="2 Permissions">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">2 · Autorisations</span><span style="font-size:13px;color:var(--color-neutral-500)">Sombre · notifications accordées, localisation en attente</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>9:42</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:4px 16px 0;display:flex;flex-direction:column;height:calc(100% - 54px);box-sizing:border-box">
+            <div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 4px"><i class="ph ph-caret-left" style="font-size:22px;color:var(--acc)"></i><span style="font-size:14px;color:var(--mut)">2 sur 3</span></div>
+            <span style="margin-top:10px;padding:0 4px;font-size:32px;font-weight:500;letter-spacing:-.025em">Deux autorisations</span>
+            <span style="margin-top:6px;padding:0 4px;font-size:16px;line-height:1.4;color:var(--mut);text-wrap:pretty">Swept travaille en arrière-plan. Rien d'autre ne sera demandé.</span>
+            <div style="margin-top:22px;display:flex;flex-direction:column;gap:12px">
+              <div style="border-radius:22px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:16px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;gap:12px;align-items:center"><div style="width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--acc) 18%,transparent);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--accT)"><i class="ph ph-bell-simple"></i></div><span style="flex:1;font-size:17px;font-weight:600">Notifications</span><span style="display:flex;gap:5px;align-items:center;font-size:14px;color:var(--safe)"><i class="ph-fill ph-check-circle"></i>Autorisées</span></div>
+                <span style="font-size:15px;line-height:1.4;color:var(--mut)">Pour vous prévenir la veille au soir et une heure avant.</span>
+              </div>
+              <div style="border-radius:22px;background:var(--card);box-shadow:inset 0 0 0 1px var(--acc);padding:16px;display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;gap:12px;align-items:center"><div style="width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--acc) 18%,transparent);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--accT)"><i class="ph ph-map-pin"></i></div><span style="flex:1;font-size:17px;font-weight:600">Localisation « Toujours »</span></div>
+                <span style="font-size:15px;line-height:1.4;color:var(--mut);text-wrap:pretty">Pour noter où la voiture est garée quand l'app est fermée.</span>
+                <div style="display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.4;padding:10px 12px;border-radius:14px;background:var(--fill)"><i class="ph ph-info" style="font-size:17px;color:var(--mut);flex:none"></i><span style="text-wrap:pretty">iOS posera la question deux fois. La seconde fois, choisissez « Remplacer par Toujours ».</span></div>
+                <div style="height:46px;border-radius:23px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600">Autoriser la localisation</div>
+              </div>
+              <span style="padding:0 4px;font-size:14px;color:var(--mut)">Refusé par erreur ? <span style="color:var(--acc)">Ouvrir Réglages</span></span>
+            </div>
+            <div style="margin-top:auto;margin-bottom:46px;height:52px;border-radius:26px;background:var(--fill);color:var(--mut);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;opacity:.6">Continuer</div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{lv}}" data-screen-label="3 Car setup">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">3 · La voiture</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · Bluetooth choisi, étapes Raccourcis</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>9:43</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:4px 16px 0;display:flex;flex-direction:column;height:calc(100% - 54px);box-sizing:border-box">
+            <div style="height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 4px"><i class="ph ph-caret-left" style="font-size:22px;color:var(--acc)"></i><span style="font-size:14px;color:var(--mut)">3 sur 3</span></div>
+            <span style="margin-top:10px;padding:0 4px;font-size:30px;line-height:1.12;font-weight:500;letter-spacing:-.025em;text-wrap:balance">Rendez le stationnement automatique</span>
+            <span style="margin-top:8px;padding:0 4px;font-size:16px;line-height:1.4;color:var(--mut);text-wrap:pretty">Quand le téléphone quitte le Bluetooth de la voiture, Swept note l'endroit.</span>
+            <div style="margin-top:20px;display:flex;flex-direction:column;gap:10px">
+              <div style="border-radius:22px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--acc);padding:16px;display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;gap:12px;align-items:center"><div style="width:22px;height:22px;border-radius:11px;border:6px solid var(--acc);box-sizing:border-box"></div><span style="flex:1;font-size:17px;font-weight:600">Ma voiture a le Bluetooth</span><span style="font-size:12px;font-weight:600;padding:3px 8px;border-radius:8px;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--accT)">Recommandé</span></div>
+                <div style="display:flex;flex-direction:column;gap:10px;padding-left:34px;font-size:14px;line-height:1.35">
+                  <div style="display:flex;gap:10px"><span style="width:20px;height:20px;border-radius:10px;background:var(--fill);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none">1</span><span>Raccourcis › Automatisation › Bluetooth</span></div>
+                  <div style="display:flex;gap:10px"><span style="width:20px;height:20px;border-radius:10px;background:var(--fill);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none">2</span><span>Se connecte à « Polestar 2 » → <b style="font-weight:600">Swept : je pars</b></span></div>
+                  <div style="display:flex;gap:10px"><span style="width:20px;height:20px;border-radius:10px;background:var(--fill);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none">3</span><span>Se déconnecte → <b style="font-weight:600">Swept : je suis garé</b></span></div>
+                  <div style="display:flex;gap:10px"><span style="width:20px;height:20px;border-radius:10px;background:var(--fill);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;flex:none">4</span><span>Éteignez la voiture : une notification de test arrive.</span></div>
+                </div>
+              </div>
+              <div style="border-radius:22px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:16px;display:flex;gap:12px;align-items:flex-start">
+                <div style="width:22px;height:22px;border-radius:11px;border:1.5px solid var(--mut);box-sizing:border-box;flex:none"></div>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:600">Je le dirai moi-même</span><span style="font-size:14px;color:var(--mut)">Touchez « Je viens de me garer » à chaque fois.</span></div>
+              </div>
+            </div>
+            <div style="margin-top:auto;margin-bottom:40px;display:flex;flex-direction:column;gap:6px">
+              <div style="height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Configurer l'automatisation</div>
+              <div style="height:44px;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--acc)">Passer pour l'instant</div>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{lv}}" data-screen-label="8 Manual schedule">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">8 · Horaire manuel</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · feuille, copiée du panneau</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>19:06</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:18px">
+            <div style="height:48px;display:flex;align-items:center;justify-content:space-between;font-size:17px;padding:0 4px"><span style="color:var(--acc)">Annuler</span><span style="font-weight:600">Horaire</span><span style="color:var(--acc);font-weight:600">Enregistrer</span></div>
+            <div style="display:flex;gap:14px;align-items:center;padding:14px;border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)">
+              <div style="width:78px;flex:none;border-radius:8px;background:#f3f5fe;box-shadow:0 0 0 1px rgba(22,24,38,.15);padding:7px 5px;display:flex;flex-direction:column;align-items:center;gap:3px;color:#c3352f;font-weight:700">
+                <div style="width:30px;height:30px;border-radius:15px;border:3px solid #c3352f;box-sizing:border-box;position:relative;display:flex;align-items:center;justify-content:center;font-size:15px;color:#161826">P<div style="position:absolute;width:32px;height:3px;background:#c3352f;transform:rotate(-45deg)"></div></div>
+                <span style="font-size:9px;line-height:1.1;text-align:center">15h30-16h30<br>VEN.<br>1 AVRIL AU 1 DÉC.</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:16px;font-weight:600">Copiez-le du panneau</span><span style="font-size:14px;line-height:1.35;color:var(--mut);text-wrap:pretty">Le panneau rouge « \P » le plus proche de la voiture, pour rue Galt, côté ouest.</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Jours</span>
+              <div style="display:flex;justify-content:space-between;padding:12px;border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)">
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Lu</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Ma</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Me</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Je</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:#0072B2;color:#f3f5fe;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;box-shadow:0 0 0 2px var(--card),0 0 0 3.5px #0072B2">Ve</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Sa</div>
+                <div style="width:40px;height:40px;border-radius:20px;background:var(--fill);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600">Di</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Heures</span>
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;justify-content:space-between;height:50px;font-size:17px"><span>Début</span><span style="padding:6px 12px;border-radius:10px;background:var(--fill);font-variant-numeric:tabular-nums">15:30</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;height:50px;font-size:17px;border-top:1px solid var(--line)"><span>Fin</span><span style="padding:6px 12px;border-radius:10px;background:var(--fill);font-variant-numeric:tabular-nums">16:30</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="padding-left:16px;font-size:13px;color:var(--mut)">Saison</span>
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;justify-content:space-between;height:50px;font-size:17px"><span>Du</span><span style="padding:6px 12px;border-radius:10px;background:var(--fill)">1 avril</span></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;height:50px;font-size:17px;border-top:1px solid var(--line)"><span>Au</span><span style="padding:6px 12px;border-radius:10px;background:var(--fill)">1 décembre</span></div>
+              </div>
+              <span style="padding:0 16px;font-size:13px;line-height:1.4;color:var(--mut)">Rappels : jeudi 20 h 00 et vendredi 14 h 30.</span>
+            </div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{dv}}" data-screen-label="9 Reminders">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">9 · Rappels</span><span style="font-size:13px;color:var(--color-neutral-500)">Sombre · valeurs par défaut</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>21:15</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:18px;height:calc(100% - 54px);box-sizing:border-box">
+            <div style="height:44px;display:flex;align-items:center;gap:4px;font-size:17px;color:var(--acc)"><i class="ph ph-caret-left" style="font-size:22px"></i>Accueil</div>
+            <span style="padding:0 4px;font-size:34px;font-weight:500;letter-spacing:-.025em">Rappels</span>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+                <div style="display:flex;align-items:center;justify-content:space-between;height:52px;font-size:17px"><span style="display:flex;gap:12px;align-items:center"><i class="ph ph-moon" style="font-size:20px;color:var(--acc)"></i>La veille au soir</span><div style="width:51px;height:31px;border-radius:16px;background:var(--acc);position:relative;flex:none"><div style="position:absolute;right:2px;top:2px;width:27px;height:27px;border-radius:14px;background:#f3f5fe;box-shadow:0 2px 4px rgba(0,0,0,.25)"></div></div></div>
+                <div style="display:flex;align-items:center;justify-content:space-between;height:52px;font-size:17px;border-top:1px solid var(--line)"><span>Heure</span><span style="padding:6px 12px;border-radius:10px;background:var(--fill);font-variant-numeric:tabular-nums">20:00</span></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px 14px">
+                <div style="display:flex;align-items:center;justify-content:space-between;height:52px;font-size:17px"><span style="display:flex;gap:12px;align-items:center"><i class="ph ph-alarm" style="font-size:20px;color:var(--acc)"></i>Avant le début</span><div style="width:51px;height:31px;border-radius:16px;background:var(--acc);position:relative;flex:none"><div style="position:absolute;right:2px;top:2px;width:27px;height:27px;border-radius:14px;background:#f3f5fe;box-shadow:0 2px 4px rgba(0,0,0,.25)"></div></div></div>
+                <div style="display:flex;padding:3px;border-radius:12px;background:var(--fill);font-size:15px;font-weight:500">
+                  <div style="flex:1;height:34px;display:flex;align-items:center;justify-content:center;color:var(--mut)">30 min</div>
+                  <div style="flex:1;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--color-neutral-800);box-shadow:0 1px 3px rgba(0,0,0,.3)">1 h</div>
+                  <div style="flex:1;height:34px;display:flex;align-items:center;justify-content:center;color:var(--mut)">2 h</div>
+                </div>
+              </div>
+            </div>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;height:52px;font-size:17px"><span style="display:flex;gap:12px;align-items:center"><i class="ph ph-speaker-high" style="font-size:20px;color:var(--acc)"></i>Son</span><div style="width:51px;height:31px;border-radius:16px;background:var(--acc);position:relative;flex:none"><div style="position:absolute;right:2px;top:2px;width:27px;height:27px;border-radius:14px;background:#f3f5fe;box-shadow:0 2px 4px rgba(0,0,0,.25)"></div></div></div>
+            </div>
+            <span style="padding:0 16px;font-size:14px;line-height:1.45;color:var(--mut);text-wrap:pretty">Pour Coloniale côté est : jeudi à 20 h 00, puis vendredi à 14 h 30. Si le nettoyage commence et que la voiture est toujours là, une dernière alerte part.</span>
+            <div style="margin-top:auto;margin-bottom:46px;height:52px;border-radius:26px;border:1.5px solid var(--acc);color:var(--accT);background:color-mix(in srgb,var(--acc) 14%,transparent);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600">Enregistrer</div>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{lv}}" data-screen-label="10 Saved spots">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">10 · Lieux enregistrés</span><span style="font-size:13px;color:var(--color-neutral-500)">Clair · une rangée glissée (Renommer, Supprimer)</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>8:02</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:14px">
+            <div style="height:44px;display:flex;align-items:center;justify-content:space-between;font-size:17px;color:var(--acc)"><span style="display:flex;gap:4px;align-items:center"><i class="ph ph-caret-left" style="font-size:22px"></i>Accueil</span><i class="ph ph-plus" style="font-size:22px"></i></div>
+            <span style="padding:0 4px;font-size:34px;font-weight:500;letter-spacing:-.025em">Lieux</span>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;border-radius:11px;font-size:12px;font-weight:700;background:#0072B2;color:#f3f5fe">Ve</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:17px;font-weight:500">Maison — Coloniale est</span><span style="font-size:14px;color:var(--mut)">Ven. 15 h 30 – 16 h 30</span></div>
+                <span style="height:32px;padding:0 12px;border-radius:16px;border:1.5px solid var(--acc);color:var(--accT);display:flex;align-items:center;font-size:14px;font-weight:600">Garer ici</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line)">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;border-radius:11px;font-size:12px;font-weight:700;background:#3A9BD9;color:#161826">Ma</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:17px;font-weight:500">Bureau — Clark ouest</span><span style="font-size:14px;color:var(--mut)">Mar. 9 h – 10 h</span></div>
+                <span style="height:32px;padding:0 12px;border-radius:16px;border:1.5px solid var(--acc);color:var(--accT);display:flex;align-items:center;font-size:14px;font-weight:600">Garer ici</span>
+              </div>
+              <div style="position:relative;border-top:1px solid var(--line);height:72px;overflow:hidden">
+                <div style="position:absolute;right:0;top:0;bottom:0;display:flex"><div style="width:84px;background:var(--color-neutral-600);color:#f3f5fe;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:500"><i class="ph ph-pencil-simple" style="font-size:19px"></i>Renommer</div><div style="width:84px;background:var(--now);color:#f3f5fe;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:13px;font-weight:500"><i class="ph ph-trash" style="font-size:19px"></i>Supprimer</div></div>
+                <div style="position:absolute;inset:0;transform:translateX(-168px);background:var(--card);display:flex;align-items:center;gap:12px;padding:0 16px">
+                  <span style="display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;border-radius:11px;font-size:12px;font-weight:700;background:#D68F00;color:#161826">Lu</span>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:1px;white-space:nowrap"><span style="font-size:17px;font-weight:500">Chez Léa — Fabre est</span><span style="font-size:14px;color:var(--mut)">Lun. 8 h – 9 h</span></div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line)">
+                <span style="display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;border-radius:11px;font-size:12px;font-weight:700;background:#5f6373;color:#e9e9ed">–</span>
+                <div style="flex:1;display:flex;flex-direction:column;gap:1px"><span style="font-size:17px;font-weight:500">Parents — Galt ouest</span><span style="font-size:14px;color:var(--mut)">Horaire saisi à la main · Mer. 12 h – 14 h</span></div>
+                <span style="height:32px;padding:0 12px;border-radius:16px;border:1.5px solid var(--acc);color:var(--accT);display:flex;align-items:center;font-size:14px;font-weight:600">Garer ici</span>
+              </div>
+            </div>
+            <span style="padding:0 16px;font-size:14px;line-height:1.4;color:var(--mut);text-wrap:pretty">« Garer ici » enregistre le lieu et programme ses rappels, sans passer par la carte.</span>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="{{dv}}" data-screen-label="11 Settings">
+      <div style="display:flex;flex-direction:column;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:2px;padding-left:4px"><span style="font-size:17px;font-weight:500;color:var(--color-text)">11 · Réglages</span><span style="font-size:13px;color:var(--color-neutral-500)">Sombre · automatisation active</span></div>
+        <div style="width:393px;height:852px;border-radius:56px;position:relative;overflow:hidden;flex:none;background:var(--bg);color:var(--fg);font-family:var(--font-body);box-shadow:0 0 0 10px #0c0d14,0 0 0 11px #3f424d,0 40px 90px rgba(0,0,0,.5)">
+          <div style="position:relative;z-index:3;height:54px;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 0 46px;font-size:16px;font-weight:600"><span>21:16</span><div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#0c0d14"></div><div style="display:flex;gap:5px;font-size:16px"><i class="ph-fill ph-cell-signal-high"></i><i class="ph-bold ph-wifi-high"></i><i class="ph-fill ph-battery-high"></i></div></div>
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:12px">
+            <div style="height:44px;display:flex;align-items:center;gap:4px;font-size:17px;color:var(--acc)"><i class="ph ph-caret-left" style="font-size:22px"></i>Accueil</div>
+            <span style="padding:0 4px 4px;font-size:34px;font-weight:500;letter-spacing:-.025em">Réglages</span>
+            <span style="padding-left:16px;font-size:13px;color:var(--mut)">Voiture</span>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+              <div style="display:flex;align-items:center;gap:12px;height:62px"><i class="ph ph-bluetooth" style="font-size:21px;color:var(--acc)"></i><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:17px">Polestar 2</span><span style="font-size:13px;color:var(--mut)">Automatisation active · testée le 28 sept.</span></div><i class="ph-fill ph-check-circle" style="font-size:20px;color:var(--safe)"></i></div>
+              <div style="display:flex;align-items:center;height:48px;border-top:1px solid var(--line);font-size:17px;color:var(--acc)">Tester à nouveau</div>
+            </div>
+            <span style="padding-left:16px;margin-top:6px;font-size:13px;color:var(--mut)">Général</span>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;height:52px;font-size:17px"><span>Langue</span><div style="display:flex;padding:2px;border-radius:10px;background:var(--fill);font-size:14px;font-weight:500"><span style="padding:5px 12px;border-radius:8px;background:var(--color-neutral-800)">Français</span><span style="padding:5px 12px;color:var(--mut)">English</span></div></div>
+              <div style="display:flex;align-items:center;gap:8px;height:48px;border-top:1px solid var(--line);font-size:17px"><span style="flex:1">Rappels</span><span style="color:var(--mut);font-size:15px">20 h 00 · 1 h avant</span><i class="ph ph-caret-right" style="color:var(--mut)"></i></div>
+              <div style="display:flex;align-items:center;gap:8px;height:48px;border-top:1px solid var(--line);font-size:17px"><span style="flex:1">Lieux enregistrés</span><span style="color:var(--mut);font-size:15px">4</span><i class="ph ph-caret-right" style="color:var(--mut)"></i></div>
+            </div>
+            <span style="padding-left:16px;margin-top:6px;font-size:13px;color:var(--mut)">À propos</span>
+            <div style="border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);padding:0 16px">
+              <div style="display:flex;align-items:center;gap:8px;min-height:62px"><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:17px">Source des données</span><span style="font-size:13px;color:var(--mut)">Ville de Montréal, données ouvertes · 29 sept.</span></div><i class="ph ph-arrow-square-out" style="color:var(--mut)"></i></div>
+              <div style="padding:12px 0 14px;border-top:1px solid var(--line);font-size:14px;line-height:1.45;color:var(--mut);text-wrap:pretty">Swept est un rappel, pas une autorité. En cas de doute, le panneau sur place a le dernier mot.</div>
+            </div>
+            <span style="padding:4px 16px;font-size:13px;color:var(--mut)">Swept 1.0 (27) · fait à Montréal</span>
+          </div>
+          <div style="position:absolute;z-index:3;bottom:8px;left:50%;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--fg)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="brand" style="display:flex;flex-direction:column;gap:40px;padding:80px 80px 140px;font-family:var(--font-body);color:var(--color-text);background:var(--color-bg)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <span style="font-size:15px;color:var(--color-accent)">6 · Question ouverte</span>
+    <h2 style="margin:0;font-size:40px;font-weight:500;letter-spacing:-.02em">Couleur de marque et icône</h2>
+    <p style="margin:0;font-size:17px;line-height:1.5;color:var(--color-neutral-400);max-width:820px;text-wrap:pretty">Trois pistes. La contrainte : la marque ne doit voler ni les 7 couleurs de jours, ni les 4 couleurs d'état. Recommandation : <a href="#1a">1a</a>, utilisée dans toutes les maquettes ci-dessus.</p>
+  </div>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:stretch">
+    <div id="1a" style="width:400px;border-radius:24px;background:var(--color-surface);box-shadow:inset 0 0 0 1.5px var(--color-accent);padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:8px;background:var(--color-accent-800);color:var(--color-accent-200)">1a · Recommandée</span></div>
+      <div style="display:flex;gap:20px;align-items:flex-end">
+        <div style="width:168px;height:168px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#353b80,#161826 85%);box-shadow:inset 0 0 0 1px rgba(233,233,237,.14)"><div style="position:absolute;left:30%;top:-5%;bottom:-5%;width:40%;background:rgba(233,233,237,.07)"></div><div style="position:absolute;left:30%;top:18%;bottom:18%;width:5%;border-radius:4px;background:#595d6c"></div><div style="position:absolute;right:29%;top:18%;bottom:18%;width:7%;border-radius:6px;background:#b5abfc;box-shadow:0 0 22px 4px #9184d9"></div></div>
+        <div style="width:60px;height:60px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#353b80,#161826 85%);box-shadow:inset 0 0 0 1px rgba(233,233,237,.14)"><div style="position:absolute;left:30%;top:-5%;bottom:-5%;width:40%;background:rgba(233,233,237,.07)"></div><div style="position:absolute;left:30%;top:18%;bottom:18%;width:5%;border-radius:2px;background:#595d6c"></div><div style="position:absolute;right:29%;top:18%;bottom:18%;width:7%;border-radius:3px;background:#b5abfc;box-shadow:0 0 10px 2px #9184d9"></div></div>
+      </div>
+      <span style="font-size:24px;font-weight:500;letter-spacing:-.015em">Nuit — un côté allumé</span>
+      <div style="display:flex;gap:8px"><span style="width:36px;height:36px;border-radius:18px;background:#262a60"></span><span style="width:36px;height:36px;border-radius:18px;background:#9184d9"></span><span style="width:36px;height:36px;border-radius:18px;background:#b5abfc"></span></div>
+      <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-300);text-wrap:pretty">Une rue vue d'en haut, une seule bordure éclairée : exactement ce que fait l'app. Le bleu-violet ne croise ni l'ambre, ni le rouge, ni le vert des états, et reste distinct des bleus du lundi et du vendredi. Calme le soir, lisible en petit.</span>
+    </div>
+    <div id="1b" style="width:400px;border-radius:24px;background:var(--color-surface);box-shadow:inset 0 0 0 1px var(--color-neutral-800);padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div><span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:8px;background:var(--color-neutral-800);color:var(--color-neutral-200)">1b</span></div>
+      <div style="display:flex;gap:20px;align-items:flex-end">
+        <div style="width:168px;height:168px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:#e4e7f5"><div style="position:absolute;left:24%;top:22%;width:52%;height:52%;border-radius:50%;border:16px solid #161826;border-color:#161826 #161826 transparent transparent;box-sizing:border-box;transform:rotate(-15deg)"></div><div style="position:absolute;left:20%;right:20%;bottom:20%;height:10px;border-radius:5px;background:#161826"></div></div>
+        <div style="width:60px;height:60px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:#e4e7f5"><div style="position:absolute;left:24%;top:22%;width:52%;height:52%;border-radius:50%;border:6px solid #161826;border-color:#161826 #161826 transparent transparent;box-sizing:border-box;transform:rotate(-15deg)"></div><div style="position:absolute;left:20%;right:20%;bottom:20%;height:4px;border-radius:2px;background:#161826"></div></div>
+      </div>
+      <span style="font-size:24px;font-weight:500;letter-spacing:-.015em">Balai — monochrome</span>
+      <div style="display:flex;gap:8px"><span style="width:36px;height:36px;border-radius:18px;background:#161826;box-shadow:inset 0 0 0 1px #595d6c"></span><span style="width:36px;height:36px;border-radius:18px;background:#e4e7f5"></span></div>
+      <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-300);text-wrap:pretty">Le geste du balai sur la bordure, en encre seule. La couleur est réservée à l'information (jours, états) : rien ne concurrence la carte. Plus discrète, mais moins mémorable sur l'écran d'accueil.</span>
+    </div>
+    <div id="1c" style="width:400px;border-radius:24px;background:var(--color-surface);box-shadow:inset 0 0 0 1px var(--color-neutral-800);padding:28px;display:flex;flex-direction:column;gap:18px">
+      <div><span style="font-size:13px;font-weight:600;padding:3px 10px;border-radius:8px;background:var(--color-neutral-800);color:var(--color-neutral-200)">1c</span></div>
+      <div style="display:flex;gap:20px;align-items:flex-end">
+        <div style="width:168px;height:168px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:#c3352f;display:flex;align-items:center;justify-content:center"><div style="width:62%;height:62%;border-radius:50%;border:13px solid #f3f5fe;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:58px;font-weight:600;color:#f3f5fe;position:relative">P<div style="position:absolute;width:118%;height:13px;background:#f3f5fe;transform:rotate(-45deg)"></div></div></div>
+        <div style="width:60px;height:60px;border-radius:22.5%;flex:none;position:relative;overflow:hidden;background:#c3352f;display:flex;align-items:center;justify-content:center"><div style="width:62%;height:62%;border-radius:50%;border:5px solid #f3f5fe;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:600;color:#f3f5fe;position:relative">P<div style="position:absolute;width:118%;height:5px;background:#f3f5fe;transform:rotate(-45deg)"></div></div></div>
+      </div>
+      <span style="font-size:24px;font-weight:500;letter-spacing:-.015em">Panneau — rouge signalisation</span>
+      <div style="display:flex;gap:8px"><span style="width:36px;height:36px;border-radius:18px;background:#c3352f"></span><span style="width:36px;height:36px;border-radius:18px;background:#f3f5fe"></span></div>
+      <span style="font-size:15px;line-height:1.5;color:var(--color-neutral-300);text-wrap:pretty">Reconnu en une seconde par tout Montréalais. Mais le rouge est déjà « Déplacez maintenant » : la marque crierait en permanence, à l'opposé du ton calme, et l'icône emprunte un panneau officiel.</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;margin-top:24px">
+    <div style="width:560px;border-radius:24px;background:var(--color-surface);padding:28px;display:flex;flex-direction:column;gap:16px">
+      <span style="font-size:20px;font-weight:500">Jours sur la carte</span>
+      <span style="font-size:14px;line-height:1.5;color:var(--color-neutral-400);text-wrap:pretty">Palette Okabe-Ito, ajustée pour chaque mode. Toujours doublée de l'initiale ; gris = pas de données ; tirets = panneaux contradictoires.</span>
+      <div style="display:grid;grid-template-columns:70px repeat(7,minmax(0,1fr));gap:8px;align-items:center;font-size:13px">
+        <span style="color:var(--color-neutral-500)">Clair</span>
+        <sc-for list="{{dayL}}" as="d" hint-placeholder-count="7"><div style="height:44px;border-radius:12px;background:{{d.c}};color:{{d.t}};display:flex;align-items:center;justify-content:center;font-weight:700">{{d.k}}</div></sc-for>
+        <span style="color:var(--color-neutral-500)">Sombre</span>
+        <sc-for list="{{dayD}}" as="d" hint-placeholder-count="7"><div style="height:44px;border-radius:12px;background:{{d.c}};color:{{d.t}};display:flex;align-items:center;justify-content:center;font-weight:700">{{d.k}}</div></sc-for>
+      </div>
+    </div>
+    <div style="width:560px;border-radius:24px;background:var(--color-surface);padding:28px;display:flex;flex-direction:column;gap:16px">
+      <span style="font-size:20px;font-weight:500">États de l'accueil</span>
+      <span style="font-size:14px;line-height:1.5;color:var(--color-neutral-400);text-wrap:pretty">Chaque état a un mot et une icône ; la couleur vient en troisième. L'urgence n'existe que dans « Déplacez maintenant ».</span>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="height:44px;border-radius:12px;background:linear-gradient(90deg,#796cbf 50%,#9184d9 50%)"></div><span style="font-size:14px;display:flex;gap:6px;align-items:center"><i class="ph-fill ph-calendar-check"></i>Calme</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="height:44px;border-radius:12px;background:linear-gradient(90deg,#a8650a 50%,#e8a84a 50%)"></div><span style="font-size:14px;display:flex;gap:6px;align-items:center"><i class="ph-fill ph-clock-countdown"></i>Bientôt</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="height:44px;border-radius:12px;background:linear-gradient(90deg,#c3352f 50%,#ff6b5e 50%)"></div><span style="font-size:14px;display:flex;gap:6px;align-items:center"><i class="ph-fill ph-warning"></i>Maintenant</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="height:44px;border-radius:12px;background:linear-gradient(90deg,#2e8457 50%,#5cc98e 50%)"></div><span style="font-size:14px;display:flex;gap:6px;align-items:center"><i class="ph-fill ph-check-circle"></i>Tranquille</span></div>
+      </div>
+      <span style="font-size:13px;color:var(--color-neutral-500)">Moitié gauche : clair · moitié droite : sombre</span>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const LV={'--bg':'#eceefa','--card':'var(--color-neutral-100)','--fg':'var(--color-bg)','--mut':'var(--color-neutral-700)','--line':'rgba(22,24,38,.10)','--acc':'var(--color-accent-600)','--accT':'var(--color-accent-700)','--fill':'rgba(22,24,38,.06)','--glass':'rgba(243,245,254,.42)','--sheet':'rgba(236,238,250,.72)','--rim':'inset 1px 1.5px 0 rgba(243,245,254,.95),inset -1px -1px 0 rgba(243,245,254,.45),inset 0 0 0 .5px rgba(22,24,38,.10),0 10px 28px rgba(22,24,38,.16)','--soon':'#a8650a','--now':'#c3352f','--safe':'#2e8457'};
+const DV={'--bg':'var(--color-bg)','--card':'var(--color-surface)','--fg':'var(--color-text)','--mut':'var(--color-neutral-500)','--line':'rgba(233,233,237,.13)','--acc':'var(--color-accent)','--accT':'var(--color-accent-300)','--fill':'rgba(233,233,237,.07)','--glass':'rgba(35,37,50,.40)','--sheet':'rgba(28,30,44,.72)','--rim':'inset 1px 1.5px 0 rgba(243,245,254,.30),inset -1px -1px 0 rgba(243,245,254,.09),inset 0 0 0 .5px rgba(243,245,254,.10),0 10px 28px rgba(0,0,0,.42)','--soon':'#e8a84a','--now':'#ff6b5e','--safe':'#5cc98e'};
+const DAYK=['Lu','Ma','Me','Je','Ve','Sa','Di'];
+const DAYN=['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'];
+const DAYC={light:['#D68F00','#3A9BD9','#009E73','#D4C21E','#0072B2','#D55E00','#CC79A7'],dark:['#E69F00','#56B4E9','#1DB88E','#F0E442','#4A9BE0','#EE7733','#DD8DBA']};
+const DAYT={light:['#161826','#161826','#161826','#161826','#f3f5fe','#161826','#161826'],dark:Array(7).fill('#161826')};
+const VX=[{x:-140,n:'rue Clark'},{x:0,n:'boul. Saint-Laurent'},{x:140,n:'av. Coloniale'},{x:280,n:'rue de Bullion'},{x:420,n:"rue de l'Hôtel-de-Ville"},{x:560,n:'rue Laval'}];
+const HY=[{y:-260,n:'rue Marie-Anne'},{y:0,n:'rue Rachel'},{y:260,n:'av. Duluth'},{y:520,n:'rue Napoléon'},{y:780,n:'rue Roy'}];
+const SC={calm:'var(--acc)',soon:'var(--soon)',now:'var(--now)',safe:'var(--safe)',off:'var(--mut)'};
+const IC={calm:'ph-fill ph-calendar-check',soon:'ph-fill ph-clock-countdown',now:'ph-fill ph-warning',safe:'ph-fill ph-check-circle',off:'ph-fill ph-snowflake'};
+const COPY={
+ fr:{street:'avenue Coloniale',side:'Côté est · 3817–3935',sched:'Ven. 15 h 30 – 16 h 30 · 1 avr. – 1 déc.',season:'1 avr. – 1 déc.',block:'3817–3935',wSide:'Côté ouest',wSched:'9 h–10 h',wK:'Je',eSide:'Côté est',wrong:'Mauvais côté ?',remTitle:'Rappels',remEdit:'Modifier',foot:'Swept vous rappelle ; le panneau a le dernier mot.',dayK:'Ve',mode:['clair','sombre'],tags:['Votre côté · est','En face · jeudi'],
+  calm:{time:'14:10',since:'Garée depuis lun. 18 h 12',chip:'Calme',eyebrow:'Prochain nettoyage',big:'Dans 2 jours',sub:'Vendredi 2 oct. · 15 h 30',rem:[['p','ph ph-moon','La veille','jeu. 20 h 00'],['p','ph ph-alarm','1 h avant','ven. 14 h 30']],t:'Calme',s:'mer. 14 h 10 · plus de 24 h'},
+  soon:{time:'10:48',since:'Garée depuis lun. 18 h 12',chip:'Bientôt',eyebrow:"Nettoyage aujourd'hui",big:'Dans 4 h 42',sub:'Vendredi · 15 h 30 – 16 h 30',rem:[['d','','La veille','envoyé jeu. 20 h 00'],['p','ph ph-alarm','1 h avant','14 h 30']],t:'Bientôt',s:'ven. 10 h 48 · moins de 24 h'},
+  now:{time:'15:42',since:'Garée depuis lun. 18 h 12',chip:'Déplacez maintenant',eyebrow:'Nettoyage en cours',big:'Déplacez votre voiture',sub:"Contravention possible jusqu'à 16 h 30",progress:'20%',pL:'15 h 30',pR:'Fin 16 h 30 · encore 48 min',moveBtn:"J'ai déplacé ma voiture",t:'Déplacez maintenant',s:'ven. 15 h 42 · bouton visible sans automatisation'},
+  safe:{time:'16:31',since:'Garée depuis lun. 18 h 12',chip:'Tranquille',eyebrow:'Vous êtes tranquille',big:"Jusqu'au 9 oct.",sub:'Vendredi prochain · 15 h 30',rem:[['p','ph ph-moon','La veille','jeu. 8 oct. 20 h 00'],['p','ph ph-alarm','1 h avant','ven. 9 oct. 14 h 30']],t:"Tranquille jusqu'à la semaine prochaine",s:'ven. 16 h 31 · créneau terminé'},
+  off:{time:'11:20',since:'Garée depuis sam. 13 h 05',chip:'Hors saison',eyebrow:'Pas de nettoyage cet hiver',big:"Jusqu'au 1er avril",sub:'Swept se fait discret. Les rappels reprendront au printemps.',t:'Hors saison',s:'mar. 15 déc.'}},
+ en:{street:'avenue Coloniale',side:'East side · 3817–3935',sched:'Fri 15:30–16:30 · Apr 1 – Dec 1',season:'Apr 1 – Dec 1',block:'3817–3935',wSide:'West side',wSched:'9:00–10:00',wK:'Th',eSide:'East side',wrong:'Wrong side?',remTitle:'Reminders',remEdit:'Change',foot:'Swept reminds you; the sign has the final word.',dayK:'Fr',mode:['light','dark'],tags:['Your side · east','Opposite · Thu'],
+  calm:{time:'14:10',since:'Parked since Mon 18:12',chip:'Calm',eyebrow:'Next cleaning',big:'In 2 days',sub:'Friday Oct 2 · 15:30',rem:[['p','ph ph-moon','Evening before','Thu 20:00'],['p','ph ph-alarm','1 h before','Fri 14:30']],t:'Calm',s:'Wed 14:10 · more than 24 h'},
+  soon:{time:'10:48',since:'Parked since Mon 18:12',chip:'Soon',eyebrow:'Cleaning today',big:'In 4 h 42',sub:'Friday · 15:30–16:30',rem:[['d','','Evening before','sent Thu 20:00'],['p','ph ph-alarm','1 h before','14:30']],t:'Soon',s:'Fri 10:48 · less than 24 h'},
+  now:{time:'15:42',since:'Parked since Mon 18:12',chip:'Move now',eyebrow:'Cleaning in progress',big:'Move your car now',sub:'Ticket possible until 16:30',progress:'20%',pL:'15:30',pR:'Ends 16:30 · 48 min left',moveBtn:'I moved my car',t:'Move now',s:'Fri 15:42 · window in progress'},
+  safe:{time:'16:31',since:'Parked since Mon 18:12',chip:'Safe',eyebrow:"You're good",big:'Until Oct 9',sub:'Next Friday · 15:30',rem:[['p','ph ph-moon','Evening before','Thu Oct 8, 20:00'],['p','ph ph-alarm','1 h before','Fri Oct 9, 14:30']],t:'Safe until next week',s:'Fri 16:31 · window over'}}
+};
+
+class Component extends DCLogic {
+  segs(){
+    if(this._s) return this._s;
+    const s=[], ys=[-400,...HY.map(h=>h.y),920], xs=[-280,...VX.map(v=>v.x),700];
+    VX.forEach((v,i)=>{ for(let j=0;j<ys.length-1;j++){ [0,1].forEach(si=>{
+      let d=(i*4+j*3+si*2)%5; if((i+j)%6===2&&si) d=5;
+      let nod=(i*7+j*5+si)%11===0, disp=(i*5+j*3+si)%13===4;
+      const key=`v-${i}-${j}-${si}`;
+      if(key==='v-2-3-1'){d=4;nod=false;disp=false} if(key==='v-2-3-0'){d=3;nod=false;disp=false}
+      const x=v.x+(si?9:-9);
+      s.push({key,d,nod,disp,side:si,x1:x,x2:x,y1:ys[j]+17,y2:ys[j+1]-17,t:si?0.5:0.3});
+    })}});
+    HY.forEach((hh,j)=>{ for(let i=0;i<xs.length-1;i++){ [0,1].forEach(si=>{
+      let d=(j*4+i*3+si*2+1)%5; if(i===4&&j===2&&si) d=6;
+      const nod=(i*3+j*7+si)%9===0, disp=(i*5+j*7+si)%17===3, y=hh.y+(si?9:-9);
+      s.push({key:`h-${j}-${i}-${si}`,d,nod,disp,side:si,y1:y,y2:y,x1:xs[i]+17,x2:xs[i+1]-17,t:0.25});
+    })}});
+    return this._s=s;
+  }
+  map(o){
+    const h=React.createElement, L=o.theme==='light', C=DAYC[o.theme], TT=DAYT[o.theme];
+    const P={block:L?'#dfe2f0':'#1b1e2b',road:L?'#f7f8fd':'#2b2e3c',cas:L?'rgba(22,24,38,.30)':'rgba(8,9,15,.75)',grey:L?'#a3a7b8':'#5f6373',name:L?'#75798c':'#8a8ea2',acc:L?'#796cbf':'#9184d9'};
+    const k=[], lw=o.lw||4.5;
+    k.push(h('rect',{x:-500,y:-600,width:1500,height:1800,fill:P.block}));
+    VX.forEach(v=>k.push(h('line',{x1:v.x,x2:v.x,y1:-600,y2:1200,stroke:P.road,strokeWidth:30})));
+    HY.forEach(r=>k.push(h('line',{y1:r.y,y2:r.y,x1:-500,x2:1000,stroke:P.road,strokeWidth:30})));
+    let hs=null;
+    this.segs().forEach(s=>{
+      const isH=s.key===o.hl; if(isH) hs=s;
+      let nod=s.nod, disp=s.disp;
+      if(isH&&o.hlMode==='disputed') disp=true;
+      if(isH&&o.hlMode==='nodata'){nod=true;disp=false}
+      const col=nod?P.grey:C[s.d], w=isH?lw*1.8:lw, da=disp?`${w*1.7} ${w*1.2}`:undefined;
+      const xy={x1:s.x1,x2:s.x2,y1:s.y1,y2:s.y2}, g=[];
+      if(isH) g.push(h('line',{...xy,stroke:col,strokeWidth:w*4.5,strokeOpacity:.25,strokeLinecap:'round'}));
+      g.push(h('line',{...xy,stroke:P.cas,strokeWidth:w+2,strokeLinecap:'round',strokeDasharray:da}));
+      g.push(h('line',{...xy,stroke:col,strokeWidth:w,strokeLinecap:'round',strokeDasharray:da}));
+      if(o.labels&&!nod){
+        const mx=s.x1+(s.x2-s.x1)*s.t, my=s.y1+(s.y2-s.y1)*s.t;
+        g.push(h('rect',{x:mx-11,y:my-7.5,width:22,height:15,rx:7.5,fill:col,stroke:P.cas,strokeWidth:1}));
+        g.push(h('text',{x:mx,y:my+3.6,textAnchor:'middle',fontSize:10,fontWeight:700,fill:TT[s.d],fontFamily:'Inter, system-ui'},DAYK[s.d]));
+      }
+      k.push(h('g',{opacity:(o.dim&&!isH)?0.3:1},...g));
+    });
+    if(o.names){
+      VX.forEach(v=>k.push(h('text',{x:v.x,y:198,transform:`rotate(-90 ${v.x} 198)`,textAnchor:'middle',dominantBaseline:'central',fontSize:10.5,fontWeight:500,fill:P.name,fontFamily:'Inter, system-ui'},v.n)));
+      HY.forEach(r=>k.push(h('text',{x:89,y:r.y,textAnchor:'middle',dominantBaseline:'central',fontSize:10.5,fontWeight:500,fill:P.name,fontFamily:'Inter, system-ui'},r.n)));
+    }
+    if(o.gps){
+      const [gx,gy]=o.gps;
+      if(o.acc) k.push(h('circle',{cx:gx,cy:gy,r:o.acc,fill:P.acc,fillOpacity:.14,stroke:P.acc,strokeOpacity:.5,strokeWidth:1.5}));
+      k.push(h('circle',{cx:gx,cy:gy,r:9,fill:'#f3f5fe',stroke:'rgba(0,0,0,.15)',strokeWidth:1}));
+      k.push(h('circle',{cx:gx,cy:gy,r:6.2,fill:P.acc}));
+    }
+    if(o.pin&&hs){
+      const col=o.hlMode==='nodata'?P.grey:C[hs.d], ink=L?'#161826':'#e9e9ed', f=o.tags?0.62:1;
+      const dir=hs.side?1:-1, px=hs.x1+dir*(o.tags?16:22), py=o.tags?o.vb[1]+o.vb[3]/2:(hs.y1+hs.y2)/2;
+      k.push(h('circle',{cx:px,cy:py,r:13*f,fill:ink,stroke:P.block,strokeWidth:3*f}));
+      k.push(h('circle',{cx:px,cy:py,r:5*f,fill:col}));
+      if(o.tags){
+        const ff='Inter, system-ui', ox=hs.x1-dir*18;
+        k.push(h('text',{x:px+dir*13,y:py,textAnchor:dir>0?'start':'end',dominantBaseline:'central',fontSize:10,fontWeight:600,fill:ink,fontFamily:ff},o.tags[0]));
+        k.push(h('text',{x:ox-dir*4,y:py,textAnchor:dir>0?'end':'start',dominantBaseline:'central',fontSize:8.5,fontWeight:500,fill:P.name,fontFamily:ff},o.tags[1]));
+      }
+    }
+    return h('svg',{viewBox:o.vb.join(' '),preserveAspectRatio:'xMidYMid slice',style:{position:'absolute',inset:0,width:'100%',height:'100%',display:'block'}},...k);
+  }
+  home(state,lang,theme,x={}){
+    const c=COPY[lang], s={...c[state],...x}, L=theme==='light', sc=SC[state];
+    return {vars:L?LV:DV, sl:`7 ${s.t} ${lang} ${theme}`, label:`7 · ${s.t}`, labelSub:`${s.s} · ${lang.toUpperCase()} · ${c.mode[L?0:1]}`,
+      time:s.time, since:s.since, chip:s.chip, icon:s.icon||IC[state], sc, eyebrow:s.eyebrow, big:s.big, sub:s.sub,
+      heroBg: state==='now'?'linear-gradient(180deg,color-mix(in srgb,var(--now) 17%,var(--card)),color-mix(in srgb,var(--now) 7%,var(--card)))':`radial-gradient(130% 90% at 0% 0%,color-mix(in srgb,${sc} 20%,transparent),transparent 62%),var(--card)`,
+      progress:s.progress||false, pL:s.pL, pR:s.pR, moveBtn:s.moveBtn, disputed:s.disputed||false,
+      banner:!!s.bannerText, showFoot:!s.bannerText&&!s.disputed, bannerText:s.bannerText, bannerIcon:s.bannerIcon, bannerIc:s.bannerIc, bannerCta:s.bannerCta, bannerX:!!s.bannerX,
+      showRem:!!s.rem, rem:(s.rem||[]).map(([k,ic,l,v])=>k==='d'?{ic:'ph-fill ph-check-circle',l,v,c:'var(--mut)',icc:'var(--mut)'}:{ic,l,v,c:'var(--fg)',icc:'var(--acc)'}),
+      street:c.street, side:c.side, block:c.block, sched:c.sched, season:c.season, wSide:c.wSide, wSched:c.wSched, wK:c.wK, wC:DAYC[theme][3], wT:DAYT[theme][3], eSide:c.eSide, curbBg:s.disputed?`repeating-linear-gradient(to bottom,${DAYC[theme][4]} 0 9px,transparent 9px 15px)`:DAYC[theme][4], wrong:c.wrong, remTitle:c.remTitle, remEdit:c.remEdit, foot:c.foot, dayK:c.dayK, dayC:DAYC[theme][4], dayT:DAYT[theme][4]};
+  }
+  legend(theme){
+    const L=theme==='light';
+    return [...DAYK.map((k,i)=>({k,n:DAYN[i],c:DAYC[theme][i],t:DAYT[theme][i],b:'none'})),
+      {k:'–',n:'pas de données',c:L?'#a3a7b8':'#5f6373',t:L?'#161826':'#e9e9ed',b:'none'},
+      {k:'?',n:'contradictoire',c:'transparent',t:'var(--fg)',b:'1.5px dashed var(--mut)'}];
+  }
+  build(){
+    const st=['calm','soon','now','safe'];
+    const homeRows=[
+      {title:'Français · clair',items:st.map(s=>this.home(s,'fr','light'))},
+      {title:'Français · sombre',items:st.map(s=>this.home(s,'fr','dark'))},
+      {title:'English · light',items:st.map(s=>this.home(s,'en','light'))},
+      {title:'Variantes',items:[
+        this.home('calm','fr','light',{t:'Panneaux contradictoires',s:'majorité 15 h 30, un panneau dit 15 h 00',disputed:"1 panneau indique ven. 15 h 00 — le rappel suit l'heure la plus tôt.",rem:[['p','ph ph-moon','La veille','jeu. 20 h 00'],['p','ph ph-alarm','1 h avant 15 h 00','ven. 14 h 00']]}),
+        this.home('soon','fr','dark',{t:'Autorisation manquante',s:'localisation « Toujours » coupée',bannerText:"Localisation « Toujours » coupée : le stationnement n'est plus détecté.",bannerIcon:'ph-fill ph-warning-circle',bannerIc:'var(--soon)',bannerCta:'Corriger'}),
+        this.home('calm','fr','light',{t:'Automatisation absente',s:'invitation discrète, refermable',bannerText:'Garez-vous sans rien toucher : reliez Swept au Bluetooth de la voiture.',bannerIcon:'ph ph-bluetooth',bannerIc:'var(--acc)',bannerCta:'Configurer',bannerX:true}),
+        this.home('off','fr','dark')
+      ]}
+    ];
+    const nm=(mode)=>this.map({theme:'dark',vb:[-40,320,380,150],hl:'v-2-3-1',dim:true,pin:true,labels:true,hlMode:mode});
+    const done={t:'Voiture déplacée',ic:'ph ph-check'};
+    const notifs=[
+      {sl:'N1 Parked confirm',label:'Garé — confirmer',when:'~20 s après la déconnexion Bluetooth',date:'lundi 28 septembre',clock:'18:12',ago:'maintenant',title:"Garée sur l'avenue Coloniale, côté est ?",body:'Nettoyage ven. 15 h 30. Confirmez ou changez de côté.',hasMap:true,map:nm('normal'),actions:[{t:"Oui, c'est ça",ic:'ph ph-check'},{t:'Autre côté',ic:'ph ph-arrows-left-right'},{t:'Pas garé',ic:'ph ph-x'}]},
+      {sl:'N2 Parked no data',label:'Garé — pas de données',when:'Même moment, tronçon sans panneau',date:'mardi 29 septembre',clock:'19:04',ago:'maintenant',title:'Garée sur la rue Galt, côté ouest',body:"Aucun panneau de nettoyage trouvé ici. L'ajouter ?",hasMap:true,map:nm('nodata'),actions:[{t:"Ajouter l'horaire",ic:'ph ph-plus'},{t:'Ça va, pas de rappel',ic:'ph ph-bell-slash'}]},
+      {sl:'N3 Evening before',label:'La veille',when:'Jeudi, 20 h 00 par défaut',date:'jeudi 1 octobre',clock:'20:00',ago:'maintenant',title:'Demain 15 h 30 · Coloniale, côté est',body:'Déplacez votre voiture avant 15 h 30 demain.',hasMap:true,map:nm('normal'),actions:[done,{t:'Me le rappeler plus tard',ic:'ph ph-clock-clockwise'}]},
+      {sl:'N4 Before window',label:'Avant le créneau',when:'1 h avant par défaut',date:'vendredi 2 octobre',clock:'14:30',ago:'maintenant',title:'Nettoyage dans 1 h',body:'Avenue Coloniale, côté est. Déplacez votre voiture avant 15 h 30.',hasMap:true,map:nm('normal'),actions:[done]},
+      {sl:'N5 Move now',label:'Déplacez maintenant',when:'Créneau commencé, voiture toujours là · urgente',date:'vendredi 2 octobre',clock:'15:31',ago:'maintenant',urgent:true,title:'Le nettoyage a commencé',body:'Coloniale, côté est. Déplacez-la maintenant pour éviter une contravention.',hasMap:false,actions:[done]},
+      {sl:'N6 Disputed',label:'Panneau contradictoire',when:'Ajouté aux rappels quand les panneaux divergent',date:'jeudi 1 octobre',clock:'20:00',ago:'maintenant',title:'Demain 15 h 00 · Coloniale, côté est',body:'Déplacez votre voiture avant 15 h 00 demain.',extra:'Un panneau ici indique 15 h 00 (les autres, 15 h 30) — rappel réglé sur 15 h 00.',hasMap:true,map:nm('disputed'),actions:[done,{t:'Me le rappeler plus tard',ic:'ph ph-clock-clockwise'}]}
+    ].map(n=>({extra:false,urgent:false,...n}));
+    const pv=[-40,-60,430,932];
+    return {lv:LV,dv:DV,homeRows,notifs,
+      legendL:this.legend('light'),legendD:this.legend('dark'),
+      dayL:DAYK.map((k,i)=>({k,c:DAYC.light[i],t:DAYT.light[i]})),dayD:DAYK.map((k,i)=>({k,c:DAYC.dark[i],t:DAYT.dark[i]})),
+      mapPick:this.map({theme:'light',vb:pv,labels:true,names:true,gps:[157,392],acc:14}),
+      mapPickSel:this.map({theme:'light',vb:pv,labels:true,names:true,gps:[157,392],acc:14,hl:'v-2-3-1'}),
+      mapPickLow:this.map({theme:'dark',vb:pv,labels:true,names:true,gps:[146,400],acc:66}),
+      mapConf:this.map({theme:'light',vb:[-55,255,410,282],hl:'v-2-3-1',dim:true,pin:true,labels:true}),
+      mapConfDisp:this.map({theme:'light',vb:[-55,270,410,250],hl:'v-2-3-1',dim:true,pin:true,labels:true,hlMode:'disputed'}),
+      mapConfNo:this.map({theme:'dark',vb:[-55,255,410,282],hl:'v-2-3-0',dim:true,pin:true,labels:true,hlMode:'nodata'})};
+  }
+  renderVals(){ if(!this._v) this._v=this.build(); return this._v; }
+}
+</script>
+</body>
+</html>
