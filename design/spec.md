@@ -103,4 +103,4 @@ The loop runs itself: when the car's Bluetooth connects, the spot is cleared and
 - [x] Name: Swept (decided).
 - [x] Default reminder times: 20:00 the evening before + 1 h before — right?
 - [x] Moving the car: decided — detected automatically (Bluetooth connects = spot cleared, next disconnect = new spot); "I moved my car" stays only as a manual fallback.
-- [ ] Brand colour and icon direction.
+- [x] Brand colour and icon direction: 1a "Nuit — un côté allumé" (indigo night, one lit east curb).
