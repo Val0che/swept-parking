@@ -42,7 +42,8 @@ export default function Pick() {
   const [zoomedOut, setZoomedOut] = useState(false);
   const [query, setQuery] = useState('');
   const [notFound, setNotFound] = useState(false);
-  const start = useRef(handed ?? (spot ? { lat: spot.lat, lng: spot.lng } : FALLBACK)).current;
+  // Where the map opens; fixed for the life of the screen.
+  const [start] = useState(() => handed ?? (spot ? { lat: spot.lat, lng: spot.lng } : FALLBACK));
 
   useEffect(() => {
     if (handed) return;

@@ -57,7 +57,7 @@ export default function Reminders() {
             minuteInterval={5}
             disabled={!r.eveningEnabled}
             value={new Date(2026, 0, 1, 0, r.eveningAt)}
-            onChange={(_, d) => d && set({ eveningAt: d.getHours() * 60 + d.getMinutes() })}
+            onValueChange={(_, d) => set({ eveningAt: d.getHours() * 60 + d.getMinutes() })}
           />
         </Row>
       </Group>

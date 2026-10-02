@@ -118,11 +118,11 @@ export default function Schedule() {
         <Group title={s.hours}>
           <Row first>
             <Text style={[styles.label, { color: c.fg }]}>{s.startTime}</Text>
-            <DateTimePicker mode="time" display="compact" locale={lang === 'fr' ? 'fr-CA' : 'en-GB'} minuteInterval={5} value={atMinutes(start)} onChange={(_, d) => d && setStart(minutesOf(d))} />
+            <DateTimePicker mode="time" display="compact" locale={lang === 'fr' ? 'fr-CA' : 'en-GB'} minuteInterval={5} value={atMinutes(start)} onValueChange={(_, d) => setStart(minutesOf(d))} />
           </Row>
           <Row>
             <Text style={[styles.label, { color: c.fg }]}>{s.endTime}</Text>
-            <DateTimePicker mode="time" display="compact" locale={lang === 'fr' ? 'fr-CA' : 'en-GB'} minuteInterval={5} value={atMinutes(end)} onChange={(_, d) => d && setEnd(minutesOf(d))} />
+            <DateTimePicker mode="time" display="compact" locale={lang === 'fr' ? 'fr-CA' : 'en-GB'} minuteInterval={5} value={atMinutes(end)} onValueChange={(_, d) => setEnd(minutesOf(d))} />
           </Row>
         </Group>
 
@@ -137,7 +137,7 @@ export default function Schedule() {
               locale={lang === 'fr' ? 'fr-CA' : 'en-GB'}
               display="compact"
               value={new Date(YEAR, from.month - 1, from.day)}
-              onChange={(_, d) => d && setFrom({ month: d.getMonth() + 1, day: d.getDate() })}
+              onValueChange={(_, d) => setFrom({ month: d.getMonth() + 1, day: d.getDate() })}
             />
           </Row>
           <Row>
@@ -147,7 +147,7 @@ export default function Schedule() {
               locale={lang === 'fr' ? 'fr-CA' : 'en-GB'}
               display="compact"
               value={new Date(YEAR, to.month - 1, to.day)}
-              onChange={(_, d) => d && setTo({ month: d.getMonth() + 1, day: d.getDate() })}
+              onValueChange={(_, d) => setTo({ month: d.getMonth() + 1, day: d.getDate() })}
             />
           </Row>
         </Group>

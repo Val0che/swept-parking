@@ -1,6 +1,8 @@
-import { alarmRules, homeState, plannedReminders, type ReminderSettings } from '@swept/core';
-import { scheduleShort, seasonShort } from '../schedule/text';
 import {
+  alarmRules,
+  homeState,
+  plannedReminders,
+  type ReminderSettings,
   calendarDays,
   cap,
   dateLong,
@@ -12,6 +14,7 @@ import {
   when,
   type Lang,
 } from '@swept/core';
+import { scheduleShort, seasonShort } from '../schedule/text';
 import type { Strings } from '../../i18n/strings';
 import type { ParkedSpot } from '../../state/store';
 
@@ -109,7 +112,8 @@ export function buildHome(
       hero.disputed = s.disputed(`${dayShort(disputedOcc.start.getDay(), lang)} ${time(disputedOcc.start, lang)}`);
     }
     if (state.kind !== 'moveNow') {
-      const planned = plannedReminders(alarm, settings, now);
+      // A reminder dated before the car was parked here was never sent: leave it out.
+      const planned = plannedReminders(alarm, settings, now).filter((r) => r.at > parkedAt);
       const withDate = planned.some((r) => calendarDays(now, r.at) >= 7);
       reminders = planned.map((r) => {
         const label =

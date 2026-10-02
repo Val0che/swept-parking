@@ -63,7 +63,7 @@ export function HomeParked({ spot }: { spot: ParkedSpot }) {
         </Card>
       )}
 
-      <SpotCard spot={m.spot} oppositeDay={spot.oppositeDay} wrongSide={s.wrongSide} onWrongSide={() => router.push('/pick')} />
+      <SpotCard spot={m.spot} side={spot.side} oppositeDay={spot.oppositeDay} wrongSide={s.wrongSide} onWrongSide={() => router.push('/pick')} />
       {m.reminders && m.reminders.length > 0 && (
         <RemindersCard rows={m.reminders} title={s.reminders} edit={s.edit} onEdit={() => router.push('/reminders')} />
       )}

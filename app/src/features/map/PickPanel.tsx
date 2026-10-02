@@ -24,11 +24,11 @@ export function PickLegend({ title, sub }: { title: string; sub: string }) {
             <Text style={[styles.legendText, { color: c.mut }]}>{dayLong(d, lang)}</Text>
           </View>
         ))}
-        <View style={styles.legendItem}>
+        <View style={styles.legendWide}>
           <DayPill lang={lang} />
           <Text style={[styles.legendText, { color: c.mut }]}>{s.noData}</Text>
         </View>
-        <View style={styles.legendItem}>
+        <View style={styles.legendWide}>
           <View style={[styles.dashed, { borderColor: c.mut }]}>
             <Text style={[styles.dashedText, { color: c.fg }]}>?</Text>
           </View>
@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
   sub: { fontSize: 15, lineHeight: 20 },
   legend: { flexDirection: 'row', flexWrap: 'wrap', rowGap: 10, marginTop: 6 },
   legendItem: { width: '33.3%', flexDirection: 'row', alignItems: 'center', gap: 6 },
+  // "pas de données" and "contradictoire" are too long for a third of the row.
+  legendWide: { width: '50%', flexDirection: 'row', alignItems: 'center', gap: 6 },
   legendText: { fontSize: 13 },
   dashed: { minWidth: 26, height: 18, borderRadius: 9, borderWidth: 1.5, borderStyle: 'dashed', alignItems: 'center', justifyContent: 'center' },
   dashedText: { fontSize: 11, fontWeight: '700' },

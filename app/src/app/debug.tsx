@@ -15,15 +15,28 @@ import { useTheme } from '../theme/useTheme';
 export default function Debug() {
   const { c } = useTheme();
   const { s } = useLang();
-  const [events, setEvents] = useState<ParkEvent[]>([]);
+  const [events, setEvents] = useState<ParkEvent[]>(() => ParkingNative.events());
   const [pending, setPending] = useState<{ id: string; title: string }[]>([]);
 
-  const reload = useCallback(async () => {
+  const loadPending = useCallback(
+    () =>
+      Notifications.getAllScheduledNotificationsAsync().then((all) =>
+        all.map((n) => ({ id: n.identifier, title: n.content.title ?? '' })).sort((a, b) => a.id.localeCompare(b.id)),
+      ),
+    [],
+  );
+  useEffect(() => {
+    let live = true;
+    void loadPending().then((list) => live && setPending(list));
+    return () => {
+      live = false;
+    };
+  }, [loadPending]);
+
+  const reload = async () => {
     setEvents(ParkingNative.events());
-    const all = await Notifications.getAllScheduledNotificationsAsync();
-    setPending(all.map((n) => ({ id: n.identifier, title: n.content.title ?? '' })).sort((a, b) => a.id.localeCompare(b.id)));
-  }, []);
-  useEffect(() => void reload(), [reload]);
+    setPending(await loadPending());
+  };
 
   const run = async (action: () => Promise<void>) => {
     await action();

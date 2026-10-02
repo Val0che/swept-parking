@@ -41,21 +41,23 @@ describe('locate', () => {
   // A sign pole on the east sidewalk (pole 15975 in the city data).
   const onEastSidewalk: LngLat = [-73.576765, 45.517151];
 
-  it('finds the side with a tight fix', () => {
+  it('picks the nearest side without asking', () => {
     const hit = locate([west, east], onEastSidewalk, 5);
     expect(hit?.side.id).toBe(1);
     expect(hit?.opposite?.id).toBe(2);
     expect(hit?.ambiguous).toBe(false);
   });
 
-  it('refuses to guess with a loose fix', () => {
-    expect(locate([west, east], onEastSidewalk, 20)?.ambiguous).toBe(true);
+  it('still guesses with an ordinary city fix', () => {
+    expect(locate([west, east], onEastSidewalk, 20)?.ambiguous).toBe(false);
+  });
+
+  it('asks only when the fix is too loose to mean anything', () => {
     expect(locate([west, east], onEastSidewalk, 60)?.ambiguous).toBe(true);
   });
 
-  it('is ambiguous in the middle of the road', () => {
-    const middle: LngLat = [-73.576122, 45.516782];
-    expect(locate([west, east], middle, 5)?.ambiguous).toBe(true);
+  it('has nothing to ask when the block has only one side', () => {
+    expect(locate([east], onEastSidewalk, 60)?.ambiguous).toBe(false);
   });
 
   it('returns nothing far from any street', () => {

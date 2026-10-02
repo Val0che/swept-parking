@@ -44,7 +44,7 @@ const input = (over: Partial<ParkedInput> = {}): ParkedInput => ({
 const at = (ms: number | null) => (ms === null ? 'now' : new Date(ms).toString().slice(0, 21));
 
 describe('onParked', () => {
-  it('records the east side and asks to confirm', () => {
+  it('records the nearest side and offers to switch', () => {
     const { spot, notifications } = onParked(input());
     expect(spot).toMatchObject({ sideId: 12500501, side: 'east', street: 'avenue Coloniale', oppositeDay: 3 });
     expect(spot?.unconfirmed).toBeUndefined();
@@ -73,8 +73,8 @@ describe('onParked', () => {
     expect(reminders[2]).toMatchObject({ category: 'moveNow', timeSensitive: true });
   });
 
-  it('asks which side when GPS is loose, and covers both sides until answered', () => {
-    const { spot, notifications } = onParked(input({ accuracy: 20 }));
+  it('asks which side only when the fix is very loose, and then covers both sides until answered', () => {
+    const { spot, notifications } = onParked(input({ accuracy: 60 }));
     expect(spot?.unconfirmed).toMatchObject({ otherSideId: 12500502, otherSide: 'west' });
     expect(notifications[0]).toMatchObject({
       category: 'parkedAmbiguousEW',

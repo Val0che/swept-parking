@@ -69,16 +69,24 @@ export interface Located {
   /** Metres from the fix to the side's curb line. */
   distance: number;
   opposite?: SideRecord;
-  /** The fix can't tell this side from the opposite one: ask, never guess. */
+  /** The fix is too loose to even guess between the two sides: ask. */
   ambiguous: boolean;
 }
 
 /** Sides further than this from the fix are not "where the car is". */
 export const MAX_SIDE_DISTANCE_M = 45;
+/** Beyond this the fix may not even be on the right street: ask instead of guessing. */
+export const MAX_GUESS_ACCURACY_M = 50;
 
 /**
- * The block side a GPS fix is on. `accuracy` is the fix's radius in metres;
- * the two curbs of a street are only ~8 m apart, so a loose fix is ambiguous.
+ * The block side a GPS fix is nearest to.
+ *
+ * The two curbs of an ordinary street are ~8 m apart and city GPS is often off by
+ * more than that, so on narrow streets this is a guess (a real car moved across
+ * avenue Coloniale was placed on its old side). The product decision is to trust
+ * the guess rather than ask every time: the "parked?" notification offers "other
+ * side" in one tap. Telling the sides apart reliably needs the drive's GPS track
+ * (`park/track.ts`, written but not wired in: it means running GPS while driving).
  */
 export function locate(candidates: SideRecord[], at: LngLat, accuracy: number): Located | undefined {
   const p = toXY(at);
@@ -89,11 +97,10 @@ export function locate(candidates: SideRecord[], at: LngLat, accuracy: number): 
   if (!best || best.distance > MAX_SIDE_DISTANCE_M) return undefined;
 
   const opp = ranked.find((r) => r.side.seg === best.side.seg && r.side.id !== best.side.id);
-  const margin = opp ? opp.distance - best.distance : Infinity;
   return {
     side: best.side,
     distance: best.distance,
     opposite: opp?.side,
-    ambiguous: accuracy > 25 || margin < accuracy * 0.75,
+    ambiguous: !!opp && accuracy > MAX_GUESS_ACCURACY_M,
   };
 }

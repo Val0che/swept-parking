@@ -1,4 +1,4 @@
-import type { Weekday } from '@swept/core';
+import type { GridSide, Weekday } from '@swept/core';
 import { SymbolView } from 'expo-symbols';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../../theme/useTheme';
@@ -7,18 +7,20 @@ import { StreetIllustration } from './StreetIllustration';
 
 interface Props {
   spot: HomeModel['spot'];
+  side: GridSide;
   oppositeDay?: Weekday;
   wrongSide: string;
   onWrongSide?: () => void;
 }
 
-export function SpotCard({ spot, oppositeDay, wrongSide, onWrongSide }: Props) {
+export function SpotCard({ spot, side, oppositeDay, wrongSide, onWrongSide }: Props) {
   const { c } = useTheme();
   const day = spot.day as Weekday | undefined;
   const dayColour = day === undefined ? c.noData : c.day[day];
   return (
     <View style={[styles.card, { backgroundColor: c.card, borderColor: c.line }]}>
       <StreetIllustration
+        side={side}
         curb={dayColour}
         opposite={oppositeDay === undefined ? undefined : c.day[oppositeDay]}
         disputed={spot.disputed}

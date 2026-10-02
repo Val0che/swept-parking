@@ -37,3 +37,5 @@ export function projectOnLine(p: XY, line: XY[]): Projection {
   best.length = walked;
   return best;
 }
+
+export const fromXY = ([x, y]: XY): LngLat => [x / M_PER_DEG_LNG, y / M_PER_DEG_LAT];
