@@ -64,6 +64,8 @@ export default function Debug() {
               {e.street ? ` · ${e.street} (${e.side})` : ''}
               {e.note ? ` · ${e.note}` : ''}
               {e.accuracy !== undefined ? ` · ±${e.accuracy.toFixed(0)} m · ${e.seconds?.toFixed(1)} s` : ''}
+              {e.fixes !== undefined ? ` · ${e.fixes} fixes` : ''}
+              {e.stale ? ' · STALE POSITION' : ''}
             </Text>
           );
         })}

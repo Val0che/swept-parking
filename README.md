@@ -10,15 +10,25 @@ Reminds you to move your car before Montreal street cleaning, for the side of th
 | `design/` | Handoff: `README.md` (specs, tokens), `Swept.dc.html` (open in a browser). |
 | `docs/spec.md` | Product spec. |
 
-### App
+### Street data
 
-The street database the app bundles (`app/assets/data/sides.db`, 16 MB) is not in git. Generate it once, and again whenever you want fresher city data:
+The app keeps its own copy of the block-side database and updates it without an app release:
+
+1. **Weekly**, the `Refresh street data` workflow (`.github/workflows/data.yml`) runs the pipeline and, if the city's data changed, publishes a release to the **`data` branch**: `manifest.json`, the full `sides.db`, and a small delta from the previous version (`deltas/N-M.json`). The branch holds a single force-pushed commit, so the 16 MB file never piles up in history.
+2. **The app** (`app/src/data/sync.ts`) reads the manifest at most once a day, applies the deltas it is missing (or downloads the full file if it is too far behind), verifies checksums, and re-plans reminders if the parked side's schedule changed.
+
+The app also ships a **baseline** in `app/assets/data/` (not in git) so it works on first launch. Before building the app:
 
 ```bash
-pnpm --filter @mtl-parking/pipeline download      # ~120 MB of city data into pipeline/.cache
-pnpm --filter @mtl-parking/pipeline build         # → pipeline/out/sides.db
-pnpm --filter @mtl-parking/pipeline publish:app   # → app/assets/data/
+pnpm --filter @mtl-parking/pipeline publish:app           # the latest release from the data branch
+# or, to bundle a local build (version 0; the app replaces it on its first sync):
+pnpm --filter @mtl-parking/pipeline download && pnpm --filter @mtl-parking/pipeline build
+pnpm --filter @mtl-parking/pipeline publish:app --local
 ```
+
+Run the workflow by hand with `gh workflow run data.yml`. Rule ids in the database are hashes of the rule's content, which is what lets a delta be applied to any copy at the right version.
+
+### App
 
 After changing anything in `core/` that the Shortcuts actions use, rebuild the embedded bundle: `pnpm --filter @swept/core bundle:native`.
 

@@ -11,13 +11,14 @@ import UserNotifications
 //   "Je suis garé" → GPS fix → nearby block sides from sides.db → the shared
 //   @swept/core logic (SweptCoreBundle, run in JavaScriptCore) picks the side and
 //   plans the notifications → they are scheduled here.
-//   "Je pars"      → cancel the reminders, mark the spot as left.
+//   "Je pars"      → cancel the reminders, mark the spot as left. Optional: the next
+//   "Je suis garé" replaces or clears the previous spot anyway.
 //
 // The JS app picks up what happened through `takeNativeState()` on its next launch.
 
 class ParkingModule: Module {
   public func definition() -> ModuleDefinition {
-    // JSON: { dbPath, lang, settings } — everything the intents need from the app.
+    // JSON: { lang, settings } — what the intents need from the app (dbPath is ignored: see SidesDB.path).
     Function("setConfig") { (json: String) in Shared.defaults.set(json, forKey: Shared.configKey) }
     // What the intents did since the last call: { spot?: json, leftAt?: ms, lastAutoAt?: ms }.
     Function("takeNativeState") { () -> [String: Any] in Shared.takeState() }
@@ -102,14 +103,14 @@ enum Parker {
     let started = Date()
     let nowMs = started.timeIntervalSince1970 * 1000
     do {
-      guard let config = Shared.config, let dbPath = config["dbPath"] as? String else { throw ParkError.notSetUp }
-      let fix = try await OneShotLocation().fetch(timeout: 20)
-      let near = try SidesDB.near(path: dbPath, lat: fix.coordinate.latitude, lng: fix.coordinate.longitude)
+      guard let config = Shared.config else { throw ParkError.notSetUp }
+      let fix = try await OneShotLocation().fetch()
+      let near = try SidesDB.near(path: SidesDB.path(), lat: fix.latitude, lng: fix.longitude)
 
       let input: [String: Any] = [
-        "lat": fix.coordinate.latitude,
-        "lng": fix.coordinate.longitude,
-        "accuracy": fix.horizontalAccuracy,
+        "lat": fix.latitude,
+        "lng": fix.longitude,
+        "accuracy": fix.accuracy,
         "now": nowMs,
         "lang": config["lang"] as? String ?? "fr",
         "settings": config["settings"] as? [String: Any] ?? [:],
@@ -121,15 +122,22 @@ enum Parker {
 
       var event: [String: Any] = [
         "at": nowMs, "source": source, "kind": "park",
-        "lat": fix.coordinate.latitude, "lng": fix.coordinate.longitude,
-        "accuracy": fix.horizontalAccuracy, "seconds": Date().timeIntervalSince(started),
+        "lat": fix.latitude, "lng": fix.longitude,
+        "accuracy": fix.accuracy, "seconds": Date().timeIntervalSince(started),
+        "fixes": fix.count, "stale": fix.stale,
       ]
       if source == "shortcut" { Shared.defaults.set(nowMs, forKey: Shared.autoKey) }
 
       guard let spot = result["spot"] as? [String: Any] else {
-        // Not on a street (garage, driveway): nothing to remind about.
+        // Not on a street (garage, driveway). The car has still moved, so the previous
+        // spot and its reminders are over; a stale position proves nothing, so keep them.
         event["note"] = "not on a street"
         ParkLog.append(event)
+        if !fix.stale {
+          await Notifier.cancelAll()
+          Shared.defaults.removeObject(forKey: Shared.spotKey)
+          Shared.defaults.set(nowMs, forKey: Shared.leftKey)
+        }
         return
       }
       event["street"] = spot["street"]
@@ -193,6 +201,15 @@ enum Core {
 // MARK: - sides.db
 
 enum SidesDB {
+  /// Where expo-sqlite keeps the database. Derived on every run: iOS moves the app's
+  /// container on each reinstall, so an absolute path saved earlier goes stale.
+  static func path() throws -> String {
+    let documents = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+    let file = documents.appendingPathComponent("SQLite/sides.db")
+    guard FileManager.default.fileExists(atPath: file.path) else { throw ParkError.notSetUp }
+    return file.path
+  }
+
   /// Block sides whose bounding box is within ~130 m of the point, plus the rules they reference.
   static func near(path: String, lat: Double, lng: Double) throws -> (rows: [[String: Any]], ruleJson: [String: String]) {
     var db: OpaquePointer?
@@ -294,27 +311,54 @@ enum LocationError: Error, CustomStringConvertible {
   }
 }
 
-/// Collects fixes until one is ≤ 10 m accurate or the timeout hits, then returns the best.
+struct Fix {
+  let latitude: Double
+  let longitude: Double
+  let accuracy: Double
+  /// Fresh fixes collected.
+  let count: Int
+  /// No fresh fix arrived: this is iOS's cached position with its accuracy degraded.
+  let stale: Bool
+}
+
+/// A position measured now.
+///
+/// When updates start, Core Location first replays its *cached* position: often
+/// minutes old and from somewhere else, yet reported as "±8 m". Taking it was the
+/// bug that pinned every parking on avenue Coloniale to the same point. So fixes
+/// older than the request are ignored, and GPS gets a few seconds to settle
+/// before the most accurate fresh fix is taken.
 @MainActor
 final class OneShotLocation: NSObject, CLLocationManagerDelegate {
-  private let manager = CLLocationManager()
-  private var continuation: CheckedContinuation<CLLocation, Error>?
-  private var best: CLLocation?
+  private static let settle: TimeInterval = 6
+  private static let timeout: TimeInterval = 18
+  private static let goodEnough: CLLocationAccuracy = 8
 
-  func fetch(timeout: TimeInterval) async throws -> CLLocation {
+  private let manager = CLLocationManager()
+  private var continuation: CheckedContinuation<Fix, Error>?
+  private var started = Date()
+  private var fresh: [CLLocation] = []
+  private var cached: CLLocation?
+
+  func fetch() async throws -> Fix {
     let status = manager.authorizationStatus
     guard status == .authorizedAlways || status == .authorizedWhenInUse else {
       throw LocationError.notAuthorized(status)
     }
     manager.delegate = self
     manager.desiredAccuracy = kCLLocationAccuracyBest
+    manager.distanceFilter = kCLDistanceFilterNone
     if status == .authorizedAlways { manager.allowsBackgroundLocationUpdates = true }
 
     return try await withCheckedThrowingContinuation { cont in
       continuation = cont
+      started = Date()
       manager.startUpdatingLocation()
       Task { @MainActor in
-        try? await Task.sleep(for: .seconds(timeout))
+        // Don't rely on another fix arriving to notice the settle time is over.
+        try? await Task.sleep(for: .seconds(Self.settle))
+        self.finishIfGoodEnough()
+        try? await Task.sleep(for: .seconds(Self.timeout - Self.settle))
         self.finish()
       }
     }
@@ -323,10 +367,15 @@ final class OneShotLocation: NSObject, CLLocationManagerDelegate {
   nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     Task { @MainActor in
       for loc in locations where loc.horizontalAccuracy >= 0 {
-        if best.map({ loc.horizontalAccuracy < $0.horizontalAccuracy }) ?? true { best = loc }
+        if loc.timestamp >= started.addingTimeInterval(-1) { fresh.append(loc) } else { cached = loc }
       }
-      if let best, best.horizontalAccuracy <= 10 { finish() }
+      finishIfGoodEnough()
     }
+  }
+
+  private func finishIfGoodEnough() {
+    guard Date().timeIntervalSince(started) >= Self.settle, let best = best(), best.horizontalAccuracy <= Self.goodEnough else { return }
+    finish()
   }
 
   nonisolated func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -335,11 +384,28 @@ final class OneShotLocation: NSObject, CLLocationManagerDelegate {
     Task { @MainActor in self.finish() }
   }
 
+  /// The most accurate fresh fix; GPS tightens over the first seconds, so later wins ties.
+  private func best() -> CLLocation? {
+    fresh.min { ($0.horizontalAccuracy, -$0.timestamp.timeIntervalSince1970) < ($1.horizontalAccuracy, -$1.timestamp.timeIntervalSince1970) }
+  }
+
   private func finish() {
     manager.stopUpdatingLocation()
     guard let continuation else { return }
     self.continuation = nil
-    if let best { continuation.resume(returning: best) } else { continuation.resume(throwing: LocationError.noFix) }
+    if let best = best() {
+      continuation.resume(returning: Fix(
+        latitude: best.coordinate.latitude, longitude: best.coordinate.longitude,
+        accuracy: best.horizontalAccuracy, count: fresh.count, stale: false))
+    } else if let cached {
+      // Better than recording nothing, but not to be trusted for the side: the
+      // degraded accuracy makes the shared logic ask instead of guessing.
+      continuation.resume(returning: Fix(
+        latitude: cached.coordinate.latitude, longitude: cached.coordinate.longitude,
+        accuracy: max(cached.horizontalAccuracy, 100), count: 0, stale: true))
+    } else {
+      continuation.resume(throwing: LocationError.noFix)
+    }
   }
 }
 

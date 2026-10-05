@@ -5,7 +5,7 @@ import {
   type PlannedNotification,
   type SideRecord,
 } from '@swept/core';
-import { dbPath, oppositeOf, sideById } from '../data/db';
+import { oppositeOf, sideById } from '../data/db';
 import { currentLang } from '../i18n/useLang';
 import { ParkingNative } from '../native/parkingNative';
 import { applyPlan, cancelAll } from '../notifications/schedule';
@@ -64,7 +64,7 @@ export async function switchSide(sideId: number): Promise<void> {
 
 /** Tell the Shortcuts intents what they need to work with the app closed. */
 export function pushConfig(): void {
-  ParkingNative.setConfig(JSON.stringify({ dbPath: dbPath(), lang: currentLang(), settings: state().reminders }));
+  ParkingNative.setConfig(JSON.stringify({ lang: currentLang(), settings: state().reminders }));
 }
 
 /**
@@ -89,4 +89,18 @@ export async function syncNative(): Promise<void> {
     const { spot } = state();
     if (spot && new Date(spot.parkedAt).getTime() < native.leftAt) state().clearSpot();
   }
+}
+
+/**
+ * After the street data was updated: if the city changed the schedule of the side
+ * the car is on, adopt it and re-plan the reminders. A schedule the user typed in
+ * themselves always wins.
+ */
+export async function refreshSpotFromData(): Promise<void> {
+  const { spot } = state();
+  if (!spot || spot.manualSchedule) return;
+  const side = sideById(spot.sideId);
+  if (!side || JSON.stringify(side.rules) === JSON.stringify(spot.schedule.rules)) return;
+  state().park({ ...spot, schedule: { rules: side.rules }, oppositeDay: oppositeOf(side)?.rules[0]?.rule.days[0] });
+  await replan();
 }

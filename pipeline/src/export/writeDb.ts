@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { rmSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { gridSideOf, type GridSide, type LngLat } from '@swept/core';
@@ -25,7 +26,7 @@ const SCHEMA = `
     disputed INTEGER NOT NULL DEFAULT 0
   );
   CREATE INDEX side_seg ON side (seg);
-  -- Each distinct sign rule once; a few hundred cover the whole city.
+  -- Each distinct sign rule once; a few hundred cover the whole city. Ids are content hashes.
   CREATE TABLE rule (id INTEGER PRIMARY KEY, json TEXT NOT NULL UNIQUE);
   CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 `;
@@ -44,6 +45,13 @@ function fallbackGrid(side: StreetSide): GridSide {
   return gridSideOf(side.line, shifted);
 }
 
+/**
+ * A rule's id is derived from its content, so every build gives the same rule the
+ * same id. Deltas between releases (`release.ts`) rely on that: a row's "rules"
+ * column must mean the same thing in the old database and the new one.
+ */
+export const stableRuleId = (json: string): number => parseInt(createHash('sha1').update(json).digest('hex').slice(0, 7), 16);
+
 export function writeDb(path: string, sides: StreetSide[], schedules: SideSchedule[], builtAt: string): { rows: number } {
   rmSync(path, { force: true });
   const db = new DatabaseSync(path);
@@ -57,13 +65,15 @@ export function writeDb(path: string, sides: StreetSide[], schedules: SideSchedu
     'INSERT OR IGNORE INTO side (id, seg, street, grid, a1, a2, oneway, minlat, maxlat, minlng, maxlng, line, rules, day, disputed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
   );
   const insertRule = db.prepare('INSERT INTO rule (id, json) VALUES (?, ?)');
-  const ruleIds = new Map<string, number>();
+  const ruleJsonById = new Map<number, string>();
   const ruleId = (json: string) => {
-    let id = ruleIds.get(json);
-    if (id === undefined) {
-      id = ruleIds.size + 1;
-      ruleIds.set(json, id);
+    const id = stableRuleId(json);
+    const known = ruleJsonById.get(id);
+    if (known === undefined) {
+      ruleJsonById.set(id, json);
       insertRule.run(id, json);
+    } else if (known !== json) {
+      throw new Error(`rule id collision on ${id}: widen stableRuleId`);
     }
     return id;
   };
@@ -95,6 +105,8 @@ export function writeDb(path: string, sides: StreetSide[], schedules: SideSchedu
     rows += Number(changes);
   }
   db.prepare('INSERT INTO meta VALUES (?, ?)').run('builtAt', builtAt);
+  // 0 = a local build that was never released; `release.ts` stamps the real version.
+  db.prepare('INSERT INTO meta VALUES (?, ?)').run('version', '0');
   db.exec('COMMIT');
   db.exec('VACUUM');
   db.close();

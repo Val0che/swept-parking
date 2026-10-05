@@ -11,3 +11,4 @@ export * from './i18n/street';
 export * from './park/spot';
 export * from './park/onParked';
 export * from './notify/plan';
+export * from './data/release';

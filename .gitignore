@@ -7,3 +7,4 @@ out/
 #   pnpm --filter @mtl-parking/pipeline download && pnpm --filter @mtl-parking/pipeline build && pnpm --filter @mtl-parking/pipeline publish:app
 app/assets/data/sides.db
 app/assets/data/sides.meta.json
+.prev/

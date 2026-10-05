@@ -8,7 +8,8 @@
     "lookup": "tsx src/lookup.ts",
     "check": "tsc --noEmit",
     "test": "vitest run",
-    "publish:app": "tsx src/publish.ts"
+    "publish:app": "tsx src/publish.ts",
+    "release": "tsx src/release.ts"
   },
   "dependencies": {
     "csv-parse": "^7.0.3",

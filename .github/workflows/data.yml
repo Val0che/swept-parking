@@ -1,0 +1,61 @@
+name: Refresh street data
+
+# Rebuilds the block-side database from Ville de Montréal open data and publishes
+# it to the `data` branch, where the app syncs from (app/src/data/sync.ts).
+# Nothing is published when the city's data hasn't changed.
+
+on:
+  schedule:
+    - cron: '17 9 * * 1' # Mondays, 05:17 in Montreal
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: street-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24 # the pipeline uses the built-in node:sqlite
+          cache: pnpm
+
+      - name: Install the pipeline and its dependencies
+        run: pnpm install --frozen-lockfile --filter "@mtl-parking/pipeline..."
+
+      - name: Fetch the previous release
+        run: |
+          git clone --quiet --depth 1 --branch data "https://github.com/${{ github.repository }}" pipeline/.prev \
+            || echo "No data branch yet: this will be the first release."
+
+      - name: Download the city's data
+        run: pnpm --filter @mtl-parking/pipeline download
+
+      - name: Build the database
+        run: pnpm --filter @mtl-parking/pipeline build
+
+      - name: Prepare the release
+        id: release
+        run: pnpm --filter @mtl-parking/pipeline release
+
+      - name: Publish to the data branch
+        if: steps.release.outputs.changed == 'true'
+        working-directory: pipeline/out/release
+        run: |
+          # One commit, force-pushed: the branch keeps no history, so the 16 MB
+          # database never accumulates in the repository.
+          git init --quiet --initial-branch data
+          git add --all
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet --message "data: version ${{ steps.release.outputs.version }}"
+          git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" data

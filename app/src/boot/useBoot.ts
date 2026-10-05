@@ -5,13 +5,18 @@ import { prepareDb } from '../data/db';
 import { currentLang } from '../i18n/useLang';
 import { registerCategories } from '../notifications/categories';
 import { respond } from '../notifications/respond';
-import { pushConfig, replan, syncNative } from '../parking/actions';
+import { syncData } from '../data/sync';
+import { pushConfig, refreshSpotFromData, replan, syncNative } from '../parking/actions';
 
 /** Bring the app in line with whatever the Shortcuts intents did, then top up the reminders. */
 async function refresh(): Promise<void> {
   await syncNative();
   // Scheduling only covers a few weeks ahead; every visit extends it.
   await replan();
+  // Fresh street data, at most once a day and never blocking the screens.
+  void syncData().then((result) => {
+    if (result === 'updated') void refreshSpotFromData();
+  });
 }
 
 /**

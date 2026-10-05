@@ -6,7 +6,7 @@ import { Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-na
 import { Group, Row } from '../components/Card';
 import { subScreenOptions } from '../components/navOptions';
 import { Segmented } from '../components/Segmented';
-import { dataBuiltAt } from '../data/db';
+import { dataInfo } from '../data/db';
 import { useLang } from '../i18n/useLang';
 import { registerCategories } from '../notifications/categories';
 import { pushConfig, replan } from '../parking/actions';
@@ -75,7 +75,7 @@ export default function Settings() {
           <Pressable onPress={() => void Linking.openURL(DATA_URL)} style={styles.navRow} accessibilityRole="link">
             <View style={styles.flex}>
               <Text style={[styles.label, { color: c.fg }]}>{s.dataSource}</Text>
-              <Text style={[styles.sub, { color: c.mut }]}>{s.dataSourceSub(dateOf(dataBuiltAt, lang))}</Text>
+              <Text style={[styles.sub, { color: c.mut }]}>{s.dataSourceSub(dateOf(dataInfo().builtAt, lang))}</Text>
             </View>
             <SymbolView name="arrow.up.right.square" size={18} tintColor={c.mut} />
           </Pressable>

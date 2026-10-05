@@ -7,6 +7,7 @@
     "@swept/core": "workspace:*",
     "expo": "~57.0.26",
     "expo-constants": "~57.0.20",
+    "expo-file-system": "~57.0.7",
     "expo-glass-effect": "~57.0.4",
     "expo-linking": "~57.0.11",
     "expo-localization": "~57.0.2",

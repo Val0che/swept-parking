@@ -1,42 +1,95 @@
-import { sideFromRow, type SideRecord, type SideRow } from '@swept/core';
-import Storage from 'expo-sqlite/kv-store';
+import { sideFromRow, type Delta, type SideRecord, type SideRow } from '@swept/core';
+import { File } from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
-import meta from '../../assets/data/sides.meta.json';
+import bundled from '../../assets/data/sides.meta.json';
 
-// The city's block sides, built by pipeline/ and bundled as assets/data/sides.db.
-// Read-only: user data lives in the zustand store, never here.
+// The city's block sides. A baseline ships in the app (assets/data/sides.db, built
+// by pipeline/); `sync.ts` then keeps the copy on the phone up to date from the
+// repo's `data` branch. User data lives in the zustand store, never here.
 
 const NAME = 'sides.db';
-const VERSION_KEY = 'swept.sidesDb.builtAt';
 
 let db: SQLite.SQLiteDatabase | undefined;
-let rules: Record<number, string> | undefined;
-
-/** Copy the bundled database into place (again whenever a new one ships). Call once at start-up. */
-export async function prepareDb(): Promise<void> {
-  if (db) return;
-  const stale = Storage.getItemSync(VERSION_KEY) !== meta.builtAt;
-  await SQLite.importDatabaseFromAssetAsync(NAME, {
-    assetId: require('../../assets/data/sides.db'),
-    forceOverwrite: stale,
-  });
-  db = SQLite.openDatabaseSync(NAME, { useNewConnection: true });
-  rules = Object.fromEntries(db.getAllSync<{ id: number; json: string }>('SELECT id, json FROM rule').map((r) => [r.id, r.json]));
-  Storage.setItemSync(VERSION_KEY, meta.builtAt);
-}
+let rules: Record<number, string> = {};
 
 /** Absolute path of the database file, for the native intents. */
 export function dbPath(): string {
   return `${String(SQLite.defaultDatabaseDirectory).replace(/^file:\/\//, '').replace(/\/$/, '')}/${NAME}`;
 }
 
-export const dataBuiltAt = new Date(meta.builtAt);
+function open(): void {
+  db = SQLite.openDatabaseSync(NAME, { useNewConnection: true });
+  rules = Object.fromEntries(db.getAllSync<{ id: number; json: string }>('SELECT id, json FROM rule').map((r) => [r.id, r.json]));
+}
+
+function close(): void {
+  db?.closeSync();
+  db = undefined;
+}
+
+/** Version and date of the data on the phone. 0 = an unreleased local build, -1 = not open yet. */
+export function dataInfo(): { version: number; builtAt: Date } {
+  const meta = Object.fromEntries(
+    (db?.getAllSync<{ key: string; value: string }>('SELECT key, value FROM meta') ?? []).map((r) => [r.key, r.value]),
+  );
+  return { version: Number(meta.version ?? -1), builtAt: new Date(meta.builtAt ?? 0) };
+}
+
+/**
+ * Open the database, first copying the bundled baseline into place when the phone
+ * has none, or an older one than this build ships (after an app update). A copy
+ * that sync has already moved past the bundled version is left alone.
+ */
+export async function prepareDb(): Promise<void> {
+  if (db) return;
+  let stale = !new File(`file://${dbPath()}`).exists;
+  if (!stale) {
+    try {
+      open();
+      const local = dataInfo();
+      stale = bundled.version > local.version || (bundled.version === local.version && new Date(bundled.builtAt) > local.builtAt);
+    } catch {
+      stale = true; // unreadable or from before the schema had a version
+    }
+    close();
+  }
+  await SQLite.importDatabaseFromAssetAsync(NAME, { assetId: require('../../assets/data/sides.db'), forceOverwrite: stale });
+  open();
+}
+
+/** Apply one release delta in a single transaction. Safe to apply twice. */
+export function applyDelta(delta: Delta): void {
+  const conn = db;
+  if (!conn) throw new Error('prepareDb() has not finished');
+  conn.withTransactionSync(() => {
+    for (const r of delta.rules) conn.runSync('INSERT OR REPLACE INTO rule (id, json) VALUES (?, ?)', r.id, r.json);
+    for (const s of delta.upsert) {
+      conn.runSync(
+        'INSERT OR REPLACE INTO side (id, seg, street, grid, a1, a2, oneway, minlat, maxlat, minlng, maxlng, line, rules, day, disputed) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        s.id, s.seg, s.street, s.grid, s.a1, s.a2, s.oneway, s.minlat, s.maxlat, s.minlng, s.maxlng, s.line, s.rules, s.day, s.disputed,
+      );
+    }
+    for (const id of delta.remove) conn.runSync('DELETE FROM side WHERE id = ?', id);
+    conn.runSync("INSERT OR REPLACE INTO meta (key, value) VALUES ('version', ?)", String(delta.to));
+    conn.runSync("INSERT OR REPLACE INTO meta (key, value) VALUES ('builtAt', ?)", delta.builtAt);
+  });
+  for (const r of delta.rules) rules[r.id] = r.json;
+}
+
+/** Swap in a freshly downloaded full database. */
+export function replaceWith(downloaded: File): void {
+  close();
+  const target = new File(`file://${dbPath()}`);
+  if (target.exists) target.delete();
+  downloaded.move(target);
+  open();
+}
 
 const COLUMNS = 'id, seg, street, grid, a1, a2, oneway, line, rules';
 
 function read(sql: string, params: (number | string)[]): SideRecord[] {
-  if (!db || !rules) throw new Error('prepareDb() has not finished');
-  return db.getAllSync<SideRow>(sql, params).map((row) => sideFromRow(row, rules!));
+  if (!db) throw new Error('prepareDb() has not finished');
+  return db.getAllSync<SideRow>(sql, params).map((row) => sideFromRow(row, rules));
 }
 
 export interface Bounds {
