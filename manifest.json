@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builtAt": "2026-10-12T19:06:39.130Z",
+  "sides": 91606,
+  "full": {
+    "path": "sides.db",
+    "md5": "66cb0bfd39a123edba247542d7218d25",
+    "bytes": 16449536
+  },
+  "deltas": [
+    {
+      "from": 1,
+      "to": 2,
+      "path": "deltas/1-2.json",
+      "md5": "2c2523a10b6d04fba136eda602d97cc6",
+      "bytes": 131916
+    }
+  ]
+}
