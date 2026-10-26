@@ -1,0 +1,33 @@
+{
+  "version": 4,
+  "builtAt": "2026-10-26T16:10:22.249Z",
+  "sides": 91602,
+  "full": {
+    "path": "sides.db",
+    "md5": "f4b1090b610489e9e88b555a907cd1dc",
+    "bytes": 16445440
+  },
+  "deltas": [
+    {
+      "from": 1,
+      "to": 2,
+      "path": "deltas/1-2.json",
+      "md5": "2c2523a10b6d04fba136eda602d97cc6",
+      "bytes": 131916
+    },
+    {
+      "from": 2,
+      "to": 3,
+      "path": "deltas/2-3.json",
+      "md5": "da380e74cc8dd18a10349baec563d5f8",
+      "bytes": 32983
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "path": "deltas/3-4.json",
+      "md5": "03a82921e7d71e7d9f55bc9dd717951c",
+      "bytes": 147129
+    }
+  ]
+}
